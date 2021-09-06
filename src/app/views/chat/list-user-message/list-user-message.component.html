@@ -1,0 +1,12 @@
+<div class="list-group rounded-0">
+        <app-item-user-message 
+        *ngFor="let user of listUser"
+            [lastMessage]="user.lastMessage.content"
+            [online]="user.online"
+            [active]="shouldActive(user)"
+            img="../../../../assets/img/user_image.png"
+            [user]="user.user"
+            (selected)="selectUser($event)"
+            [idDiscuss]="user.idDiscuss"
+        ></app-item-user-message>
+</div>
