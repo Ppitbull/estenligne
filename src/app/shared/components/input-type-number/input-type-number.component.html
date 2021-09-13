@@ -1,0 +1,11 @@
+<ngx-intl-tel-input [preferredCountries]="preferredCountries"
+    #inputTel
+    [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+    [cssClass]="'custom'"
+    [ngClass]="cssClass"
+    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+    [selectedCountryISO]="CountryISO.Cameroon" [maxLength]="15"
+    [separateDialCode]="separateDialCode"
+    [inputId]="inputTelId"
+    [numberFormat]="PhoneNumberFormat.National" name="phone">
+</ngx-intl-tel-input>

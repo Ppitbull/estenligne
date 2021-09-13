@@ -8,13 +8,14 @@ export class User extends Entity
     sexe:String="";
     email:String="";
     photoUrl:String="";
-    mdp:String="";
-    tel:String="";
+    password:String="";
+    phoneNumber:String="";
     dateCreation:String="";
     dateNaiss:String="";
     lieuxNaiss:String="";
     villeResidenceActuelle:String="";
     nationalite:String="";
+    rememberMe:boolean=false;
 
     getPrintableName()
     {

@@ -13,7 +13,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
-    ChatRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule

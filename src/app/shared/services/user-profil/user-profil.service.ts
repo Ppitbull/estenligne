@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from '../../entities/accounts';
 import { EntityID } from '../../entities/entityid';
-import { accountBuilder } from '../../utils/functions/account.builder';
+import { User } from '../../entities/user';
 import { FireBaseApi, ActionStatus } from '../../utils/services/firebase';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 import { UserService } from '../user/user.service';
@@ -22,7 +21,11 @@ export class UserProfilService {
     ) {
     
     this.localStorageService.getSubjectByKey("user_profil").subscribe((userObj:any)=>{
-      if(userObj)this.currentUser.next(accountBuilder(userObj))
+      if(userObj){
+        let user:User=new User()
+        user.hydrate(userObj)
+        this.currentUser.next(user)
+      }
     })
   }
   setUser(user:User):void
