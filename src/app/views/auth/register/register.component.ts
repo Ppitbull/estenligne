@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/shared/entities/user';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { MustMatch } from 'src/app/shared/utils/helpers/validators';
+import { ActionStatus } from 'src/app/shared/utils/services/firebase';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +15,8 @@ export class RegisterComponent implements OnInit {
   waitResponse=false;
   form:FormGroup
   errorText="";
-  constructor(private formBuilder:FormBuilder) { }
+  successText="";
+  constructor(private formBuilder:FormBuilder,private authService:AuthService) { }
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
@@ -37,7 +40,6 @@ export class RegisterComponent implements OnInit {
   submitForm()
   {
     this.submitedForm=true;
-    console.log(this.form.value)
     if(this.form.value.email.length==0 && this.form.value.phoneNumber.length==0)
     {
       this.errorText="You must specify at least one value between email and phone number"
@@ -50,7 +52,15 @@ export class RegisterComponent implements OnInit {
     let user:User = new User()
     user.hydrate(this.form.value);
     user.phoneNumber=this.form.value.phoneNumber.internationalNumber;
-
+    this.authService.createAccount(user)
+    .then((result:ActionStatus)=>{
+      this.waitResponse=false;
+      this.successText="Account created successful. Please login to continue..."
+    })
+    .catch((error:ActionStatus)=>{
+      this.waitResponse=false;
+      this.errorText=error.message;
+    })
   }
 
 }

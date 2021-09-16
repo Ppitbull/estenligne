@@ -1,7 +1,7 @@
 import { Entity } from "src/app/shared/entities/entity";
 
 
-export class KResponse extends Entity
+export class CResponse extends Entity
 {
     
     private _header:Record<string | number,string>={}; 
@@ -12,32 +12,32 @@ export class KResponse extends Entity
     private _request:Record<string | number,string>={}; 
 
     
-    header(key:string,value:any):KResponse
+    header(key:string,value:any):CResponse
     {
         this._header[key]=value;
         return this;
     }
-    headers(headers:Record<string | number,string>={}):KResponse
+    headers(headers:Record<string | number,string>={}):CResponse
     {
         this._header={...this._header,...headers}
         return this;
     }
-    data(data:any):KResponse
+    data(data:any):CResponse
     {
         this._data=data;
         return this;
     }
-    status(status:number):KResponse
+    status(status:number):CResponse
     {
         this._status=status;
         return this;
     }
-    statusText(statusText:String):KResponse
+    statusText(statusText:String):CResponse
     {
         this._statusText=statusText
         return this;
     }
-    config(conf:Record<string | number,string>={}):KResponse
+    config(conf:Record<string | number,string>={}):CResponse
     {
         this._config=conf;
         return this;
@@ -53,12 +53,20 @@ export class KResponse extends Entity
         }
     }
 
-    hydrate(entity: Record<number | string , any>): void {
+    hydrate(entity: Entity): void {
         
     }
 
     getData():any
     {
         return this._data
+    }
+    getStatus():number
+    {
+        return this._status;
+    }
+    getStatusText():String
+    {
+        return this._statusText
     }
 }

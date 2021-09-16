@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { EventService } from '../../utils/services/events/event.service';
-import { User } from '../../entities/accounts';
 
-@Injectable()
+
+@Injectable({
+  providedIn:"root"
+})
 export class LocalStorageService {
   data: Map < String, BehaviorSubject<any> >= new Map < String, BehaviorSubject<any> >();
 

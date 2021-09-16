@@ -2,11 +2,8 @@ import { Entity } from "src/app/shared/entities/entity";
 import { Method } from "../http-method.type";
 
 
-export class KRequest extends Entity
+export class CRequest extends Entity
 {
-    hydrate(entity: Record<string | number , any>): void {
-        throw new Error("Method not implemented.");
-    }    
     headerData:Record<string | number,string>={}; 
     requestType:String="json";
     dataObj:any=null;
@@ -14,68 +11,68 @@ export class KRequest extends Entity
     link:String="";
     method:Method='get';
 
-    token(accesstoken:any):KRequest
+    token(accesstoken:any):CRequest
     {
         this.accesstoken=accesstoken;
         return this;
     }
 
-    get():KRequest
+    get():CRequest
     {
         this.method="get";
         return this;
     }
-    post():KRequest
+    post():CRequest
     {
         this.method="post";
         return this;
     }
-    put():KRequest
+    put():CRequest
     {
         this.method="put";
         return this;
     }
-    delete():KRequest
+    delete():CRequest
     {
         this.method="delete";
         return this;
     }
-    header(key:string,value:any):KRequest
+    header(key:string,value:any):CRequest
     {
         this.headerData[key]=value;
         return this;
     }
-    data(data:any):KRequest
+    data(data:any):CRequest
     {
         this.dataObj=data;
         return this;
     }
-    url(link:String):KRequest
+    url(link:String):CRequest
     {
         this.link=link;
         return this;
     }
-    json():KRequest
+    json():CRequest
     {
-        this.headerData['Content-Type']="Content-Type': 'application/json";
+        this.headerData['Content-Type']="application/json";
         this.requestType="json";
         return this;
     }
-    form():KRequest
+    form():CRequest
     {
-        this.headerData['Content-Type']="Content-Type': 'multipart/form-data";
+        this.headerData['Content-Type']="multipart/form-data";
         this.requestType="form-data"
         return this;
     }
-    text():KRequest
+    text():CRequest
     {
         this.requestType="text";
         return this;
     }
-    xml():KRequest
+    xml():CRequest
     {
         this.requestType="xml";
-        this.headerData['Content-Type']="Content-Type': 'application/xml";
+        this.headerData['Content-Type']="application/xml";
         return this;
     }
     serializeDataToUrl():String
@@ -121,7 +118,7 @@ export class KRequest extends Entity
 
     toString() 
     {
-        let data;
+        let data={};
         if(this.requestType=="form-data") data= this.toFormData();
         if(this.requestType=="json") data =this.toJSON();
         return {
@@ -129,6 +126,17 @@ export class KRequest extends Entity
             method:this.method,
             headers:this.headerData,
             data,
+            requestType:this.requestType
         }
-    }    
+    } 
+    getData()   
+    {
+        if(this.method=="get") return "";
+        if(this.method=="post") return this.toJSON()
+    }
+    getParam()
+    {
+        if(this.method=="post") return "";
+        if(this.method=="get") return this.dataObj
+    }
 }

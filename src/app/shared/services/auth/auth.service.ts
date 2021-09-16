@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Subject } from 'rxjs';
-import { User } from '../../entities/accounts';
 import { EntityID } from '../../entities/entityid';
+import { User } from '../../entities/user';
 import { EventService } from '../../utils/services/events/event.service';
-import { FireBaseApi, ActionStatus } from '../../utils/services/firebase';
+import { ActionStatus } from '../../utils/services/firebase';
+import { CRequest } from '../../utils/services/http/client/crequest';
+import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
 import { LocalStorageService } from '../localstorage/localstorage.service';
-import { NotificationsService } from '../notification/notification.service';
 
 
 
@@ -19,9 +20,8 @@ export class AuthService {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private firebaseApi: FireBaseApi,
+    private apiService:RestApiClientService,
     private eventService: EventService,
-    private note: NotificationsService
   ) {
     this.localStorageService.getSubjectByKey("auth_data").subscribe((userData:any) => {
       if(userData) this.isLoggedIn.next(userData.isLoggedIn);
@@ -40,8 +40,8 @@ export class AuthService {
   logOut() {
     this.setAuth({isLoggedIn:false})
     // ;
-    this.firebaseApi.signOutApi();
-    this.note.showNotification('succes', 'Vous avez été déconnecté!');
+    // this.apiService.sendRequest(new KRequest().)
+    // this.note.showNotification('succes', 'Vous avez été déconnecté!');
     localStorage.clear();
   }
 
@@ -50,38 +50,55 @@ export class AuthService {
    *
    */
   createAccount(user: User): Promise<ActionStatus> {
-
+    // console.log(user)
     return new Promise((resolve, reject) => {
-      this.firebaseApi.createUserApi(user.email.toString(), user.mdp.toString())
-        .then((result: ActionStatus) => {
-          user.dateCreation = (new Date()).toISOString();
-          user.id = result.result.uid;
-          result.result = user;
-          resolve(result);
-        })
-        .catch(e => {
-          this.firebaseApi.handleApiError(e);
-          reject(e);
-        })
+     this.apiService.sendRequest(new CRequest().post().url("account/register").json().data(user.toString()))
+     .then((result:ActionStatus)=>{
+       let actionStatus=new ActionStatus();
+       console.log("result",result)
+       switch (result.result.getStatus())
+       {
+         case 201:
+          return resolve(actionStatus);
+        case 409:
+          actionStatus.message= result.result.getData()
+          actionStatus.apiCode=ActionStatus.INVALID_ARGUMENT_ERROR;
+        case 400:
+          actionStatus.message="Email or phone number already exist";
+          actionStatus.apiCode=ActionStatus.RESSOURCE_ALREADY_EXIST_ERROR
+          return reject(actionStatus)
+       }
+     })
+     .catch((error:ActionStatus)=>{
+       console.log("Error ",error)
+       let actionStatus=new ActionStatus();
+       actionStatus.message=error.result.response.getStatusText();
+       actionStatus.apiCode=ActionStatus.UNKNOW_ERROR;
+        reject(actionStatus)
+     })
     });
 
   }
 
 
   // Login into your account
-  authLogin(email?: string, password?: string): Promise<ActionStatus> {
-
+  authLogin(user:User): Promise<ActionStatus> {
     return new Promise((resolve, reject) => {
-      this.firebaseApi.signInApi(email, password)
+      this.apiService.sendRequest(
+        new CRequest()
+        .url("account/signin")
+        .post()
+        .json()
+        .data(user.toString())
+      )
         .then((result: ActionStatus) => {
           let userID: EntityID = new EntityID();
-          userID.setId(result.result.user.uid)
+          userID.setId(result.result.id)
           result.result = userID;
           this.setAuth({isLoggedIn:true})
           resolve(result);
         })
         .catch((error: ActionStatus) => {
-          this.firebaseApi.handleApiError(error);
           reject(error);
         })
     });

@@ -1,5 +1,5 @@
 import { ActionStatus } from "./actionstatus";
 import { FireBaseConstant } from "./firebase-constant";
-import { FirebaseDataBaseApi } from "./FirebaseDatabaseApi";
-
-export { FireBaseConstant as FireBaseErrorType, ActionStatus, FirebaseDataBaseApi as FireBaseApi}
+// import { FirebaseDataBaseApi } from "./FirebaseDatabaseApi";
+// FirebaseDataBaseApi as FireBaseApi
+export { FireBaseConstant as FireBaseErrorType, ActionStatus,}

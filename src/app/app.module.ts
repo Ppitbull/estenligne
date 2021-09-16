@@ -10,8 +10,9 @@ import { LoginComponent } from './views/auth/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatProgressBarModule} from '@angular/material/progress-bar'
 import { CommonModule } from '@angular/common';
-import { InputTypeNumberModule } from './shared/components/input-type-number/input-type-number.module';
-import { CreateUserProfilComponent } from './create-user-profil/create-user-profil.component';
+import { CreateUserProfilComponent } from './views/auth/create-user-profil/create-user-profil.component';
+import { LoadUserDatasComponent } from './views/auth/load-user-datas/load-user-datas.component';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -19,14 +20,15 @@ import { CreateUserProfilComponent } from './create-user-profil/create-user-prof
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    CreateUserProfilComponent
+    CreateUserProfilComponent,
+    LoadUserDatasComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    InputTypeNumberModule,
+    SharedModule,
     ReactiveFormsModule,
     FormsModule,
     MatProgressSpinnerModule,
