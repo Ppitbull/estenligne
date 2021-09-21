@@ -1,9 +1,17 @@
 <!-- Typing area -->
-<div class="bg-light">
-    <div class="input-group">
-        <input type="text" [formControl]="formInput" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light">
-        <div class="input-group-append">
-        <button id="button-addon2" (click)="sendMessage()" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+<form [formGroup]="form" (ngSubmit)="sendMessage()" >
+    <div class="row">
+        <div class="col-10">
+            <div class="bg-light">
+                <div class="input-group">        
+                    <input type="text" formControlName="formInput" placeholder="Type a message" aria-describedby="button-addon2" class="form-control form-control-lg rounded-0 border-0 py-4 bg-light">
+                </div>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="input-group-append">
+                <button id="button-addon2" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
-</div>
+</form>

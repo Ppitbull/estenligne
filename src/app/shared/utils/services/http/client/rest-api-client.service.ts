@@ -40,24 +40,27 @@ export class RestApiClientService extends CustomHttpClient
                 }
            )
            .subscribe((response:HttpResponse<Object>)=>{
+               console.log("Response ",response)
                 let r=new CResponse();
                 r.data(response.body)
                 .status(response.status)
                 .statusText(response.statusText)
-                response.headers.keys().forEach((currentValue)=> r.header(currentValue,response.headers.get(currentValue)))
+                // response.headers.keys().forEach((currentValue)=> r.header(currentValue,response.headers.get(currentValue)))
                 actionResult.apiCode=ActionStatus.SUCCESS;
                 actionResult.message=response.statusText;
                 actionResult.result=r;
                 resolve(actionResult);
             },
             (error:HttpErrorResponse)=>{
+                console.log("ResponseError ",error)
+                console.log("Error interne ",error.error)
                 let r=new CError();
-                r.message=error.message
+                r.message=error.error instanceof ErrorEvent ? error.error.message: error.error
                 r.response.status(error.status)
                 .statusText(error.statusText)
                 error.headers.keys().forEach((currentValue)=> r.response.header(currentValue,error.headers.get(currentValue)))
                 actionResult.apiCode=ActionStatus.UNKNOW_ERROR;
-                actionResult.message=r.message.toString();
+                // actionResult.message=r.message.toString();
                 actionResult.result=r;
                 reject(actionResult);
             })

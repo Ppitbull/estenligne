@@ -1,0 +1,26 @@
+.content-disc-infos
+{
+    border-left: 1px solid rgba(0,0,0,0.1);
+    min-height: 45px !important;
+}
+
+.pp-user
+{
+    margin-top: 18px;
+    font-size: 16px;
+}
+
+img
+{
+    margin-top: 5px;
+    border-radius: 100% !important;
+    border: 1.4px solid rgba(0,0,0,0.2);
+    margin-bottom: 5px;
+
+}
+
+.selected-user-info
+{
+    display: flex;
+    flex-direction: row;
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-typing-zone',
@@ -8,16 +8,19 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class TypingZoneComponent implements OnInit {
   @Output() sendNewMessage:EventEmitter<String>=new EventEmitter<String>();
-  formInput:FormControl=new FormControl("",[Validators.required,Validators.minLength(1)]);
+  form:FormGroup;
   constructor() { }
 
   ngOnInit(): void {
+    this.form=new FormGroup({
+      formInput:new FormControl("",[Validators.required,Validators.minLength(1)])
+    })
   }
   sendMessage():void
   {
     // console.log("Input  ",this.formInput.value)
-    if(!this.formInput.valid) return;
-    this.sendNewMessage.emit(this.formInput.value);
-    this.formInput.setValue("");
+    if(!this.form.valid) return;
+    this.sendNewMessage.emit(this.form.value.formInput);
+    this.form.reset();
   }
 }

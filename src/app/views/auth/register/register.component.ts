@@ -52,14 +52,17 @@ export class RegisterComponent implements OnInit {
     let user:User = new User()
     user.hydrate(this.form.value);
     user.phoneNumber=this.form.value.phoneNumber.internationalNumber;
+    user.rememberMe=this.form.value.rememberMe==""?false:true;
     this.authService.createAccount(user)
     .then((result:ActionStatus)=>{
       this.waitResponse=false;
       this.successText="Account created successful. Please login to continue..."
+      this.errorText=""
     })
     .catch((error:ActionStatus)=>{
       this.waitResponse=false;
       this.errorText=error.message;
+      this.successText="";
     })
   }
 

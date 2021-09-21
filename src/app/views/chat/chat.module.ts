@@ -10,13 +10,25 @@ import { ItemUserMessageComponent } from './item-user-message/item-user-message.
 import { CommonModule } from '@angular/common';
 import { DisplayMessagesComponent } from './display-messages/display-messages.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserDiscussInfosComponent } from './user-discuss-infos/user-discuss-infos.component';
+import { SearchUserBarComponent } from './search-user-bar/search-user-bar.component';
+import { InfosChatAppComponent } from './infos-chat-app/infos-chat-app.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChatRoutingModule
   ],
-  declarations: [ ChatComponent, ReceivedMessageComponent, SendMessageComponent, TypingZoneComponent, ListUserMessageComponent, ItemUserMessageComponent, DisplayMessagesComponent ]
+  declarations: [ 
+    ChatComponent, 
+    ReceivedMessageComponent,
+    SendMessageComponent, 
+    TypingZoneComponent, 
+    ListUserMessageComponent, 
+    ItemUserMessageComponent, 
+    DisplayMessagesComponent, UserDiscussInfosComponent, SearchUserBarComponent, InfosChatAppComponent 
+  ]
 })
 export class ChatModule { }

@@ -5,13 +5,9 @@ import { EntityID } from '../../entities/entityid';
 import { User } from '../../entities/user';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
-import { CResponse } from '../../utils/services/http/client/cresponse';
 import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
-import { AuthService } from '../auth/auth.service';
 import { LocalStorageService } from '../localstorage/localstorage.service';
-// import { AuthService } from '../auth/auth.service';
 
-import * as db_branch_builder from "./../../utils/functions/db-branch.builder"
 
 
 @Injectable({
@@ -19,8 +15,8 @@ import * as db_branch_builder from "./../../utils/functions/db-branch.builder"
 })
 export class UserService {
 
-  listUser: Map<String, User> = new Map<string, User>();
-  usersSubject: BehaviorSubject<Map<String, User>> = new BehaviorSubject<Map<String, User>>(this.listUser);
+  listUser: Map<any, User> = new Map<any, User>();
+  usersSubject: BehaviorSubject<Map<any, User>> = new BehaviorSubject<Map<any, User>>(this.listUser);
 
 
 
@@ -28,8 +24,22 @@ export class UserService {
     private localStorageService:LocalStorageService,
     private apiService:RestApiClientService
   ) {
-
+    
     this.localStorageService.getSubjectByKey("data_users").subscribe((value)=>{
+
+      //--------------------------Data Test -----------------------------------------------
+      let u1=new User();
+      u1.id.setId(0);
+      u1.nom="Cédric"
+      this.listUser.set(0,u1);
+
+      let u2=new User();
+      u2.id.setId(1)
+      u2.nom="Joel";
+      this.listUser.set(1,u2);
+      this.usersSubject.next(this.listUser)
+  //--------------------------Data Test -----------------------------------------------
+
       if(!value) return;
       value.forEach((userObj)=>{
         let user:User=new User();
@@ -37,6 +47,7 @@ export class UserService {
         this.listUser.clear();
         this.listUser.set(user.id.toString(),user);
       });
+
       this.usersSubject.next(this.listUser)
     })
   }
@@ -54,9 +65,6 @@ export class UserService {
   }
 
   setUser(user: User) {
-    // if (!this.listUser.has(user.id.toString())) {  }
-    // this.listUser.set(user.id.toString(), user)
-    // this.usersSubject.next(this.listUser);
     this.listUser.set(user.id.toString(),user);
     this.setListUser(this.listUser);
 
@@ -64,6 +72,8 @@ export class UserService {
 
   // recuperer les informations d'un utilisateur
   getUserById(userID: EntityID): Promise<ActionStatus> {
+    console.log("User Found ",userID,this.listUser)
+
     return new Promise<any>((resolve, reject) => {
       if (this.listUser.has(userID.toString())) {
         let result: ActionStatus = new ActionStatus();

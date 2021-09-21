@@ -9,3 +9,8 @@ export enum MessageContentType
     FILE_MESSAGE="file_message",
 }
 
+export enum DiscussionType
+{
+    GROUP_DISCUSSION="group_discussion",
+    PRIVATE_DISCUSSION="private_discussion"
+}

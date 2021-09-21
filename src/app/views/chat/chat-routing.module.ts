@@ -7,6 +7,7 @@ import { ChatComponent } from './chat/chat.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch:"full",
     component: ChatComponent,
     data: {
       title: 'Chat'

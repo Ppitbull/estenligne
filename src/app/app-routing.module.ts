@@ -22,10 +22,10 @@ const routes: Routes = [
     path:"load-data",
     component:LoadUserDatasComponent
   },
-  // {
-  //   path:"chat",
-  //   loadChildren:()=>import('./views/chat/chat.module').then((chat)=>chat.ChatModule)
-  // }
+  {
+    path:"chat",
+    loadChildren:()=>import('./views/chat/chat.module').then((chat)=>chat.ChatModule)
+  }
 ];
 
 @NgModule({

@@ -1,6 +1,7 @@
-import { ChatReadState, MessageContentType } from "../enum/chat.enum";
+import { ChatReadState, DiscussionType, MessageContentType } from "../enum/chat.enum";
 import { Entity } from "./entity";
 import { EntityID } from "./entityid";
+import { User } from "./user";
 
 export interface MessageContent
 {
@@ -18,6 +19,7 @@ export class Message extends Entity
     title:String="";
     content:MessageContent={type:MessageContentType.TEXT_MESSAGE,data:""};
     read:ChatReadState=ChatReadState.UNREAD;
+    idDiscussion:EntityID=new EntityID()
 
     hydrate(entity: Record<string | number,any>):void
     {
@@ -26,6 +28,7 @@ export class Message extends Entity
             if(key=="id") this.id.setId(entity[key]);
             else if(key=="from") this.from.setId(entity[key]);
             else if(key=="to") this.to.setId(entity[key]);
+            else if(key=="idDiscussion") this.idDiscussion.setId(entity[key]);
             else if(Reflect.has(this,key)) Reflect.set(this,key,entity[key]);
         }
     }
@@ -38,6 +41,7 @@ export class Message extends Entity
             if(k=="id") r[k]=this.id.toString();
             if(k=="from") r[k]=this.from.toString();
             if(k=="to") r[k]=this.to.toString();
+            if(k=="idDiscussion") r[k]=this.idDiscussion.toString();
             else r[k]=Reflect.get(this,k);
         }
         return r;
@@ -48,18 +52,18 @@ export class Message extends Entity
 
 export class Discussion extends Entity
 {
-    user1:EntityID=new EntityID();
-    user2:EntityID= new EntityID();
+    userMembers:EntityID[]=[]
     chats:Message[]=[];
     read:ChatReadState=ChatReadState.UNREAD;
+    type:DiscussionType=DiscussionType.PRIVATE_DISCUSSION;
+    ppurl:String="assets/img/img_group.png";
 
     toString()
     {
         let r={};
         for(const k of Object.keys(this))
         {
-            if(k=="user1") r[k]=this.user1.toString();
-            if(k=="user2") r[k]=this.user2.toString();
+            if(k=="userMembers") r[k]=this.userMembers.map((user)=>user.toString())
             if(k=="chats") r[k]=this.chats.map((msg)=>msg.toString());
             else r[k]=Reflect.get(this,k);
         }
@@ -70,8 +74,12 @@ export class Discussion extends Entity
         for(const key of Object.keys(entity))
         {
             if(key=="id") this.id.setId(entity[key]);
-            else if(key=="user1") this.user1.setId(entity[key]);
-            else if(key=="user2") this.user2.setId(entity[key]);
+            if(key=="userMembers") this.userMembers=entity[key].map((userObj)=>{
+                let user:EntityID=new EntityID()
+                user.setId(userObj);
+                return user;
+            })
+
             else if(key=="chats") this.chats=entity[key].map((chat:Record<string,any>)=> {
                     let m:Message=new Message();
                     m.hydrate(chat);
@@ -80,6 +88,10 @@ export class Discussion extends Entity
             else if(Reflect.has(this,key)) Reflect.set(this,key,entity[key]);
         }       
     }
+}
 
-
+export class GroupDiscussion extends Discussion
+{
+    type:DiscussionType=DiscussionType.GROUP_DISCUSSION;
+    description="";
 }

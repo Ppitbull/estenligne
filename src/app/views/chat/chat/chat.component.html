@@ -1,25 +1,55 @@
-<div class="container py-5 px-4">
-
-  <div class="row rounded-lg overflow-hidden shadow">
-    <!-- Users box-->
-    <div class="col px-0">
-      <div class="bg-white">
-
-        <div class="bg-gray px-4 py-2 bg-light">
-          <p class="h5 mb-0 py-1">Discussions</p>
-        </div>
-
-        <div class="messages-box">
-          <app-list-user-message [listUser]="userDiscussionList" (selectUserEvent)="selectedUserDiscuss($event)"></app-list-user-message>
+<div class="row">
+  <div class="col-3 ">
+    <div class="row user-profil-info">
+      <div class="px-4 py-1 bg-light">
+        <div class="row justify-content-between">
+          <div class="col-3">
+            <img src="assets/img/logo.png" width="70" class="rounded-lg" alt="" srcset="">
+          </div>
+          <div class="col-2 align-self-center">
+            Voiala
+            <i class="feather"  data-feather="activity"></i>
+            <i class="bi bi-arrow-right"></i>
+          </div>        
         </div>
       </div>
-    </div>
-    <!-- Chat Box-->
-    <div class="col-7 px-0">
-      <app-display-messages [discussFils]="messageToDisplay"></app-display-messages>
+    </div>  
+    
+    <div class="row search-user-bar align-self-center justify-content-center">
+      <div class="col-12">
+          <div class="row justify-content-center">
+            <div class="col-10">
+              <app-search-user-bar></app-search-user-bar>
+            </div>
+          </div>
+      </div>
+    </div>   
 
-      <app-typing-zone (sendNewMessage)="newMessage($event)"></app-typing-zone>
-
+    <div class="row messages-box bg-white">
+      <div class="col-12">
+          <app-list-user-message [listUser]="userDiscussionList" (selectUserEvent)="selectedUserDiscuss($event)"></app-list-user-message>
+      </div>
     </div>
+
+  </div>
+
+  <div class="col-9">
+    <ng-container *ngIf="hasSelectedDiscuss">
+      <div class="row">
+        <div class="col-12">
+          <app-user-discuss-infos ></app-user-discuss-infos>
+        </div>
+      </div>
+      <div class="row">
+        <app-display-messages [discussFils]="messageToDisplay"></app-display-messages>
+          <app-typing-zone (sendNewMessage)="newMessage($event)"></app-typing-zone>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="hasSelectedDiscuss==false">
+      <app-infos-chat-app></app-infos-chat-app>
+    </ng-container>
+    
   </div>
 </div>
+

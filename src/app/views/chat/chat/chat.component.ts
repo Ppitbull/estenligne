@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { combineAll } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Discussion, Message } from 'src/app/shared/entities/chat';
 import { EntityID } from 'src/app/shared/entities/entityid';
 import { User } from 'src/app/shared/entities/user';
+import { DiscussionType } from 'src/app/shared/enum/chat.enum';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { UserProfilService } from 'src/app/shared/services/user-profil/user-profil.service';
@@ -15,8 +15,11 @@ export interface DiscussionItem
   idDiscuss?:EntityID,
   user?:User,
   lastMessage?:Message,
-  online?:boolean,    
+  online?:boolean,
+  unreadLenght?:number,
+  type?:DiscussionType
 }
+
 export interface DiscussionMessage
 {
   from?:User,
@@ -35,6 +38,7 @@ export class ChatComponent implements OnInit {
   discusionList:Discussion[]=[];
   userDiscussionList:DiscussionItem[]=[];
   selectedDiscussion:BehaviorSubject<Discussion>=new BehaviorSubject<Discussion>(null);
+  hasSelectedDiscuss:boolean=false;
   messageToDisplay:DiscussionMessage[]=[];
   
   constructor(
@@ -55,21 +59,31 @@ export class ChatComponent implements OnInit {
       this.discusionList.forEach((discuss:Discussion) => {
         let d:DiscussionItem={};
         d.idDiscuss=discuss.id;
-        if(discuss.user1.toString()!=this.userProfilService.currentUser.getValue().id.toString()) 
+        discuss.type=discuss.type
+        if(discuss.type==DiscussionType.PRIVATE_DISCUSSION)
         {
-          this.userService.getUserById(discuss.user1).then((result:ActionStatus)=> {
-            d.user=result.result
+          if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString()) 
+          {
+            this.userService.getUserById(discuss.userMembers[0]).then((result:ActionStatus)=> {
+              d.user=result.result
+              d.lastMessage=discuss.chats[discuss.chats.length-1];
+              d.unreadLenght=this.chatService.getNumberOfUnReadMessageByIdDiscuss(discuss.id)
+              this.userDiscussionList.push(d); 
+            })
+          }
+          else this.userService.getUserById(discuss.userMembers[1]).then((result:ActionStatus)=> {
             d.lastMessage=discuss.chats[discuss.chats.length-1];
             this.userDiscussionList.push(d); 
+            d.user=result.result
           })
-        }
-        else this.userService.getUserById(discuss.user2).then((result:ActionStatus)=> {
-          d.lastMessage=discuss.chats[discuss.chats.length-1];
-          this.userDiscussionList.push(d); 
-          d.user=result.result
-        })
+          if(this.selectedDiscussion.getValue()!=null 
+            && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss({idDiscuss:discuss.id})
 
-        if(this.selectedDiscussion.getValue()!=null && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss({idDiscuss:discuss.id})
+        }
+        else
+        {
+          this.userDiscussionList.push(d)
+        }
       });
     })
   }
@@ -104,16 +118,17 @@ export class ChatComponent implements OnInit {
      */
     if(this.selectedDiscussion.getValue()==null) return;
 
-  //   let message:Message = new Message();
-  //   message.content=msg;
-  //   message._id=generateId();
-  //   message.from=this.authService.currentUserSubject.getValue()._id;
-  //   message.date=new Date().toISOString();
-  //   this.selectedDiscussion.subscribe((discuss:Discussion)=>{
-  //     if(discuss.inter1!=this.authService.currentUserSubject.getValue()._id) message.to=discuss.inter1;
-  //     else message.to=discuss.inter2;
-  //   });
-  //   message.idDiscussion = this.selectedDiscussion.getValue()._id;
+    let message:Message = new Message();
+    message.content.data=msg.toString();
+    message.from.setId(this.userProfilService.currentUser.getValue().id.toString());
+    message.date=new Date().toISOString();
+    if(this.selectedDiscussion.getValue().type==DiscussionType.PRIVATE_DISCUSSION)
+    {
+      let discuss=this.selectedDiscussion.getValue();
+      if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString()) message.to.setId(discuss.userMembers[0].toString());
+      else message.to.setId(discuss.userMembers[1].toString());
+    }
+    message.idDiscussion.setId(this.selectedDiscussion.getValue().id.toString());
   //   //Apres avoir ajouté a la liste de discussion suivante on peut mettre a jour le backend
   //   console.log("new message ",message);
   //  this.chatRTService.sendChatMessage(message)

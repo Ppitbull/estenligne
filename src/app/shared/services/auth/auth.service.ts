@@ -72,7 +72,9 @@ export class AuthService {
      .catch((error:ActionStatus)=>{
        console.log("Error ",error)
        let actionStatus=new ActionStatus();
-       actionStatus.message=error.result.response.getStatusText();
+      //  if(error.result.message instanceof Array && actionStatus.message.length) actionStatus.message=error.result.message[0].
+       actionStatus.message=error.result.message;
+
        actionStatus.apiCode=ActionStatus.UNKNOW_ERROR;
         reject(actionStatus)
      })

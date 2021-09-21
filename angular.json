@@ -34,6 +34,7 @@
               "src/assets/css/app.css"
             ],
             "scripts": [
+              "node_modules/feather-icons/dist/feather.js",
               "src/assets/js/app.js"
             ]
           },

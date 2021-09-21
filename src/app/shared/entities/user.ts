@@ -7,7 +7,7 @@ export class User extends Entity
     prenom:String="";
     sexe:String="";
     email:String="";
-    photoUrl:String="";
+    photoUrl:String="assets/img/user.png";
     password:String="";
     phoneNumber:String="";
     dateCreation:String="";

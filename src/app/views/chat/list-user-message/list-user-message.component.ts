@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { User } from '../../../../shared/entity/user';
-import { Message, Discussion } from '../../../../shared/entity/chat';
+
 import { DiscussionItem } from '../chat/chat.component';
-import { Provider } from '../../../../shared/entity/provider';
+import { EntityID } from 'src/app/shared/entities/entityid';
+import { User } from 'src/app/shared/entities/user';
 
 @Component({
   selector: 'app-list-user-message',
@@ -11,8 +11,8 @@ import { Provider } from '../../../../shared/entity/provider';
 })
 export class ListUserMessageComponent implements OnInit{
   @Input() listUser:DiscussionItem[]=[];
-  selectedUser:Provider=new Provider();
-  selectedDiscussionId:String="";
+  selectedDiscussId:EntityID=new EntityID();
+  selectedDiscussionId:EntityID=new EntityID();
 
   @Output() selectUserEvent:EventEmitter<DiscussionItem>=new EventEmitter<DiscussionItem>();
   constructor() { }
@@ -20,18 +20,17 @@ export class ListUserMessageComponent implements OnInit{
   ngOnInit(): void {
     // console.log("listUSer ", this.listUser)
     if(this.listUser.length> 0){      
-      this.selectedUser = this.listUser[0].user;
-      this.selectedDiscussionId = this.listUser[0].idDiscuss;
+      this.selectedDiscussId.setId(this.listUser[0].idDiscuss.toString()) ;
       // console.log("selected",this.selectedUser )
     }
   }
 
-  selectUser(idDisc:String)
+  selectUser(idDisc:EntityID)
   {
-    let discuss = this.listUser.find((disc:DiscussionItem)=> idDisc==disc.idDiscuss);
-    this.selectedUser=discuss.user;
-    this.selectedDiscussionId=idDisc;
-    this.selectUserEvent.emit(discuss);
+    // let discuss = this.listUser.find((disc:DiscussionItem)=> idDisc.toString()==disc.idDiscuss.toString());
+    // this.selectedUser=discuss.user;
+    // this.selectedDiscussionId=idDisc;
+    // this.selectUserEvent.emit(discuss);
   }
 
   shouldActive(user)

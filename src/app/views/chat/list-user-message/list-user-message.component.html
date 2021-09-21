@@ -4,9 +4,9 @@
             [lastMessage]="user.lastMessage.content"
             [online]="user.online"
             [active]="shouldActive(user)"
-            img="../../../../assets/img/user_image.png"
             [user]="user.user"
             (selected)="selectUser($event)"
             [idDiscuss]="user.idDiscuss"
+            [lengthMessage]="user.unreadLenght"
         ></app-item-user-message>
 </div>
