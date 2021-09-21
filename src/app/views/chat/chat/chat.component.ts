@@ -38,6 +38,7 @@ export class ChatComponent implements OnInit {
   discusionList:Discussion[]=[];
   userDiscussionList:DiscussionItem[]=[];
   selectedDiscussion:BehaviorSubject<Discussion>=new BehaviorSubject<Discussion>(null);
+  selectedDiscussionValueItem:DiscussionItem=null;
   hasSelectedDiscuss:boolean=false;
   messageToDisplay:DiscussionMessage[]=[];
   
@@ -59,7 +60,7 @@ export class ChatComponent implements OnInit {
       this.discusionList.forEach((discuss:Discussion) => {
         let d:DiscussionItem={};
         d.idDiscuss=discuss.id;
-        discuss.type=discuss.type
+        d.type=discuss.type
         if(discuss.type==DiscussionType.PRIVATE_DISCUSSION)
         {
           if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString()) 
@@ -90,7 +91,6 @@ export class ChatComponent implements OnInit {
 
   selectedUserDiscuss(userDiscuss: DiscussionItem): void {
     this.messageToDisplay =[];
-    
     let selectedDiscussion:Discussion = this.discusionList.find((disc:Discussion)=>userDiscuss.idDiscuss.toString()==disc.id.toString());
     this.selectedDiscussion.next(selectedDiscussion);
     selectedDiscussion.chats.forEach((message:Message)=>{
@@ -105,6 +105,7 @@ export class ChatComponent implements OnInit {
       })
     })
     this.hasSelectedDiscuss=true;
+    this.selectedDiscussionValueItem=userDiscuss
   }
   newMessage(msg:String):void
   {

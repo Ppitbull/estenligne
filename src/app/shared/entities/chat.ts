@@ -53,6 +53,7 @@ export class Message extends Entity
 export class Discussion extends Entity
 {
     userMembers:EntityID[]=[]
+    name:string=""
     chats:Message[]=[];
     read:ChatReadState=ChatReadState.UNREAD;
     type:DiscussionType=DiscussionType.PRIVATE_DISCUSSION;

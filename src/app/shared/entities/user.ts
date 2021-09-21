@@ -26,4 +26,9 @@ export class User extends Entity
         return `${this.prenom} ${this.nom}`
     }
 
+    getPrintableIdentity()
+    {
+        return this.getPrintableName().length>0?this.getPrintableName():(this.email.length>0?this.email:this.phoneNumber)
+    }
+
 }

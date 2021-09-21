@@ -72,7 +72,7 @@ export class UserService {
 
   // recuperer les informations d'un utilisateur
   getUserById(userID: EntityID): Promise<ActionStatus> {
-    console.log("User Found ",userID,this.listUser)
+    // console.log("User Found ",userID,this.listUser)
 
     return new Promise<any>((resolve, reject) => {
       if (this.listUser.has(userID.toString())) {

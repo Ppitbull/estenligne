@@ -4,19 +4,42 @@
     min-height: 45px !important;
 }
 
-.pp-user
+.online_icon{
+    height: 10px;
+    width:10px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    border:1.5px solid white;
+    }
+  
+
+.detail-online
 {
-    margin-top: 18px;
-    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 10px;
+    font-style: italic;
+    margin-left: 15px;
+    margin-top: -3px;
 }
 
+.pp-user
+{
+    margin-top: 10px;
+    font-size: 16px;
+}
+.user-infos-detail
+{
+    display: flex;
+    flex-direction: column;
+}
 img
 {
     margin-top: 5px;
     border-radius: 100% !important;
     border: 1.4px solid rgba(0,0,0,0.2);
     margin-bottom: 5px;
-
 }
 
 .selected-user-info
