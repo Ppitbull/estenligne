@@ -2,3 +2,8 @@ input::placeholder {
     font-size: 0.9rem;
     color: #999;
   }
+.fa-paper-plane
+{
+  font-size: 25px;
+  margin-top: 8px;
+}

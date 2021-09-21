@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~11.2.5",
     "@angular/platform-browser-dynamic": "~11.2.5",
     "@angular/router": "~11.2.5",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.5.3",
     "feather-icons": "^4.28.0",
     "google-libphonenumber": "^3.2.22",
