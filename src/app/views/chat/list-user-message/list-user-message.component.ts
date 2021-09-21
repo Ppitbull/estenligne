@@ -27,10 +27,9 @@ export class ListUserMessageComponent implements OnInit{
 
   selectUser(idDisc:EntityID)
   {
-    // let discuss = this.listUser.find((disc:DiscussionItem)=> idDisc.toString()==disc.idDiscuss.toString());
-    // this.selectedUser=discuss.user;
-    // this.selectedDiscussionId=idDisc;
-    // this.selectUserEvent.emit(discuss);
+    let discuss = this.listUser.find((disc:DiscussionItem)=> idDisc.toString()==disc.idDiscuss.toString());
+    this.selectedDiscussionId=idDisc;
+    this.selectUserEvent.emit(discuss);
   }
 
   shouldActive(user)

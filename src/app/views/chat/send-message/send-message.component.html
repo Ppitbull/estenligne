@@ -1,11 +1,22 @@
 <!-- Sender Message-->
-<div class="media w-50 ml-auto mb-3">
-    <!-- <img [src]="message.from.field_image" alt="user" width="50" class="rounded-circle"> -->
-    <div class="media-body ml-3">
-        <div class="bg-light rounded py-2 px-3 mb-2">
-            <p class="text-small mb-0 text-muted">{{message.message.content.data}}</p>
-        </div>
-        <p class="small text-muted">{{parseDate(message.message.date)}}</p>
+
+<div class="message-wrapper">
+    <div class="media">
+        <img [src]="message.from.photoUrl" alt="user" width="30" class="rounded-circle profile-pic left">
+        <div>
+            <div class="chat-bubble right">
+                <div class="row msg-header-username">
+                    <div class="col-12">
+                        {{message.from.getFullName()}}
+                    </div>
+                </div>
+                <div class="message" autolinker >
+                    {{message.message.content.data}}
+                </div>            
+          </div>
+          <div class="footer-message">
+            <p class="small text-muted">{{parseDate(message.message.date)}}</p>
+          </div>
+        </div>    
     </div>
-    <img src="../../../../assets/img/user_image.png" alt="user" width="50" class="rounded-circle">
 </div>

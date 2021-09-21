@@ -1,4 +1,5 @@
 .chat-box {
     min-height: 79vh !important;
     overflow-y: auto;
+    background-image: url("/assets/img/bg_image3.jpg");
   }

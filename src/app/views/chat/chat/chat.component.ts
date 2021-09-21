@@ -104,6 +104,7 @@ export class ChatComponent implements OnInit {
         })
       })
     })
+    this.hasSelectedDiscuss=true;
   }
   newMessage(msg:String):void
   {
