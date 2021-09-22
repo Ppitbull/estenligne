@@ -80,7 +80,10 @@ export class ChatService {
         });
     }
 
-    newMessage(msg: Message, discussID: String): Promise<any> {
+    newMessage(msg: Message, discussID: EntityID): Promise<any> {
+        this.listDiscusions.getValue().find((discuss:Discussion)=>discuss.id.toString()==discussID.toString()).chats.push(msg)
+        console.log(this.listDiscusions.getValue())
+        this.listDiscusions.next(this.listDiscusions.getValue());
         return new Promise((resolve, reject) => {
             
         });

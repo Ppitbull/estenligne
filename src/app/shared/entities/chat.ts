@@ -1,4 +1,4 @@
-import { ChatReadState, DiscussionType, MessageContentType } from "../enum/chat.enum";
+import { ChatReadState, DiscussionType, MessageContentType, MessageSendState} from "../enum/chat.enum";
 import { Entity } from "./entity";
 import { EntityID } from "./entityid";
 import { User } from "./user";
@@ -19,6 +19,7 @@ export class Message extends Entity
     title:String="";
     content:MessageContent={type:MessageContentType.TEXT_MESSAGE,data:""};
     read:ChatReadState=ChatReadState.UNREAD;
+    messageSendState:MessageSendState=MessageSendState.TRYING_SENDING;
     idDiscussion:EntityID=new EntityID()
 
     hydrate(entity: Record<string | number,any>):void

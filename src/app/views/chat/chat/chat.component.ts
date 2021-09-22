@@ -66,20 +66,22 @@ export class ChatComponent implements OnInit {
           if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString()) 
           {
             this.userService.getUserById(discuss.userMembers[0]).then((result:ActionStatus)=> {
-              d.user=result.result
+              d.user=result.result        
               d.lastMessage=discuss.chats[discuss.chats.length-1];
               d.unreadLenght=this.chatService.getNumberOfUnReadMessageByIdDiscuss(discuss.id)
               this.userDiscussionList.push(d); 
+              if(this.selectedDiscussion.getValue()!=null 
+                && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss(d)
             })
           }
           else this.userService.getUserById(discuss.userMembers[1]).then((result:ActionStatus)=> {
             d.lastMessage=discuss.chats[discuss.chats.length-1];
-            this.userDiscussionList.push(d); 
             d.user=result.result
+            this.userDiscussionList.push(d); 
+            if(this.selectedDiscussion.getValue()!=null 
+              && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss(d)
           })
-          if(this.selectedDiscussion.getValue()!=null 
-            && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss({idDiscuss:discuss.id})
-
+          
         }
         else
         {
@@ -131,10 +133,8 @@ export class ChatComponent implements OnInit {
       else message.to.setId(discuss.userMembers[1].toString());
     }
     message.idDiscussion.setId(this.selectedDiscussion.getValue().id.toString());
-  //   //Apres avoir ajouté a la liste de discussion suivante on peut mettre a jour le backend
+    this.chatService.newMessage(message,message.idDiscussion)
   //   console.log("new message ",message);
-  //  this.chatRTService.sendChatMessage(message)
-    // doit avoir une procédure si le message est parti ou pas
   }
 
 

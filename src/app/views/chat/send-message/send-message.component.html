@@ -1,22 +1,40 @@
 <!-- Sender Message-->
 
 <div class="message-wrapper">
-    <div class="media">
-        <img [src]="message.from.photoUrl" alt="user" width="30" class="rounded-circle profile-pic left">
-        <div>
+     <div class="media">
+        <div class="media-content">
             <div class="chat-bubble right">
-                <div class="row msg-header-username">
-                    <div class="col-12">
-                        {{message.from.getFullName()}}
+                <div class="message-content">
+                    <div class="row msg-header-username">
+                        <div class="col-12">
+                            {{message.from.getFullName()}}
+                        </div>
                     </div>
+                    <div class="message" autolinker >
+                        {{message.message.content.data}}
+                    </div> 
                 </div>
-                <div class="message" autolinker >
-                    {{message.message.content.data}}
-                </div>            
-          </div>
-          <div class="footer-message">
-            <p class="small text-muted">{{parseDate(message.message.date)}}</p>
-          </div>
-        </div>    
+                <div class="footer-message">
+                    <p class="small text-muted">{{parseDate(message.message.date)}}</p>
+                </div>           
+            </div>
+           
+        </div> 
+    <img [src]="message.from.photoUrl" alt="user" width="30" class="rounded-circle profile-pic right">
+
     </div>
+
+    <!-- <div class="chat-bubble right">
+
+        <div class="message" autolinker>
+        </div>
+
+        <div class="message-detail">
+          <span class="bold">kjljk</span>,
+          <span >lk,lk,</span>
+        </div>
+
+    </div>
+    <img [src]="message.from.photoUrl" alt="user" width="30" class="rounded-circle profile-pic right"> -->
+
 </div>

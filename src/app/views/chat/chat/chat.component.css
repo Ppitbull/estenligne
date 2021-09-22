@@ -16,10 +16,7 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  .user-pp-infos
-  {
-  }
-
+  
   ::-webkit-scrollbar
   {
     width: 5px;
@@ -51,6 +48,12 @@ body {
   .rounded-lg 
   {
     border-radius: 0.5rem !important;
+  }
+
+  .zone-discuss
+  {
+    height: 100%;
+    overflow:hidden;
   }
   
     

@@ -6,8 +6,8 @@
           <div class="col-3">
             <img src="assets/img/logo.png" width="70" class="rounded-lg" alt="" srcset="">
           </div>
-          <div class="col-7"></div>
-          <div class="col-2 align-self-center">
+          <div class="col-8"></div>
+          <div class="col-1 align-self-center">
             <i class="fas fa-ellipsis-v"></i>
           </div>        
         </div>
@@ -40,9 +40,15 @@
         </div>
       </div>
       <div class="row">
-        <app-display-messages [discussFils]="messageToDisplay"></app-display-messages>
+        <div class="zone-discuss">
+          <div class="row">
+            <div class="col-12">
+              <app-display-messages [discussFils]="messageToDisplay"></app-display-messages>
+            </div>
+          </div>
           <app-typing-zone (sendNewMessage)="newMessage($event)"></app-typing-zone>
       </div>
+        </div>
     </ng-container>
 
     <ng-container *ngIf="hasSelectedDiscuss==false">
