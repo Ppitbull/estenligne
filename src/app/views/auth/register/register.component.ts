@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from 'src/app/shared/entities/user';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { MustMatch } from 'src/app/shared/utils/helpers/validators';
@@ -16,7 +17,7 @@ export class RegisterComponent implements OnInit {
   form:FormGroup
   errorText="";
   successText="";
-  constructor(private formBuilder:FormBuilder,private authService:AuthService) { }
+  constructor(private formBuilder:FormBuilder,private authService:AuthService,private router:Router) { }
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
@@ -58,6 +59,7 @@ export class RegisterComponent implements OnInit {
       this.waitResponse=false;
       this.successText="Account created successful. Please login to continue..."
       this.errorText=""
+      setTimeout(()=>this.router.navigate(['login']),200)
     })
     .catch((error:ActionStatus)=>{
       this.waitResponse=false;

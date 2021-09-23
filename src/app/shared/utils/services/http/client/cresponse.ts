@@ -69,4 +69,8 @@ export class CResponse extends Entity
     {
         return this._statusText
     }
+    getHeader(key:String):any
+    {
+        return this._header[key.toString()]
+    }
 }

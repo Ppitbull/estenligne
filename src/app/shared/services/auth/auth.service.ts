@@ -55,7 +55,6 @@ export class AuthService {
      this.apiService.sendRequest(new CRequest().post().url("account/register").json().data(user.toString()))
      .then((result:ActionStatus)=>{
        let actionStatus=new ActionStatus();
-       console.log("result",result)
        switch (result.result.getStatus())
        {
          case 201:
@@ -94,10 +93,11 @@ export class AuthService {
         .data(user.toString())
       )
         .then((result: ActionStatus) => {
-          let userID: EntityID = new EntityID();
-          userID.setId(result.result.id)
-          result.result = userID;
+          let user:User=new User();
+          user.hydrate(result.result.getData());
+          result.result = user;
           this.setAuth({isLoggedIn:true})
+          this.apiService.setHeaderToStorage("cookies_auth",result.result.getHeader("Set-Cookie"))
           resolve(result);
         })
         .catch((error: ActionStatus) => {

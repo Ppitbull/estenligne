@@ -12,6 +12,8 @@ import { Injectable } from "@angular/core";
 import { ActionStatus } from "../../firebase";
 
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { LocalStorageService } from "src/app/shared/services/localstorage/localstorage.service";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
     providedIn:"root"
@@ -19,11 +21,33 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 export class RestApiClientService extends CustomHttpClient
 {
     apiUrl="https://estenligne.com:44364/api"
-    constructor(private http:HttpClient){
+
+    headerKey:BehaviorSubject<Map<String,any>>=new BehaviorSubject<Map<String,any>>(new Map()); 
+    
+    constructor(private http:HttpClient,
+        private localStorageService:LocalStorageService){
         super();
+        this.localStorageService.getSubjectByKey("data_resp_api").subscribe((value)=>{
+            if(!value) return;
+            let newMap:Map<String,any>=new Map();
+            value.forEach(element => {
+                newMap.set(element.key,element.value);
+            });
+            this.headerKey.next(newMap);
+        })
     }
     
-    
+    setHeaderToStorage(key:String,value:any)
+    {
+        this.headerKey.getValue().set(key,value);
+        this.localStorageService.setData("data_resp_api",
+        Array.from(this.headerKey.getValue().keys()).map((key)=>{
+            return {
+                key,
+                value:this.headerKey.getValue().get(key)
+            }
+        })  )
+    }
     sendRequest(request:CRequest):Promise<ActionStatus>
     {
         return new Promise<ActionStatus>((resolve,reject)=>{

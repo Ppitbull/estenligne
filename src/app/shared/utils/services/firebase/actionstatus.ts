@@ -13,6 +13,7 @@ export class ActionStatus {
   static SUCCESS = 0;
   static UPLOAD_PAUSED=10;
   static UPLOAD_RUNNING=11;
+  static SUCCESS_END=1;
 
   constructor(code = ActionStatus.SUCCESS, message = 'success', description = '', result = null) {
     this.code = code;

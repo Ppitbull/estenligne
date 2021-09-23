@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { EntityID } from '../../entities/entityid';
 import { User } from '../../entities/user';
 import { ActionStatus } from '../../utils/services/firebase';
+import { CRequest } from '../../utils/services/http/client/crequest';
+import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 import { UserService } from '../user/user.service';
 
@@ -15,7 +17,8 @@ export class UserProfilService {
 
   constructor(
     private localStorageService:LocalStorageService,
-    private userService:UserService
+    private userService:UserService,
+    private restApi:RestApiClientService
     ) {
     
     this.localStorageService.getSubjectByKey("user_profil").subscribe((userObj:any)=>{
@@ -59,5 +62,28 @@ export class UserProfilService {
       //   isLoggedIn:this.isLoggedIn,
       //   user
       // })
+    }
+
+    saveUserProfil(user:User):Promise<ActionStatus>
+    {
+      return new Promise<ActionStatus>((resolve,reject)=>{
+        this.restApi.sendRequest(
+          new CRequest()
+          .url("/userprofile")
+          .json()
+          .post()
+          .header("Set-Cookie",this.restApi.headerKey.getValue().get("Set-Cookie"))
+          .data({
+            "identity":user.phoneNumber==""?user.email:user.phoneNumber,
+            "username":user.nom,
+            "about":user.about
+          })
+        ).then((result:ActionStatus)=>{
+          user.hydrate(result.result.getData())
+          this.currentUser.getValue().hydrate(user.toString());
+          this.currentUser.next(this.currentUser.getValue())
+        })
+        .catch((error:ActionStatus)=>reject(error))
+      })
     }
 }

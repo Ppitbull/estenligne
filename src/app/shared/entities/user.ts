@@ -10,13 +10,18 @@ export class User extends Entity
     photoUrl:String="assets/img/user.png";
     password:String="";
     phoneNumber:String="";
-    dateCreation:String="";
+    dateCreated:String="";
     dateNaiss:String="";
     lieuxNaiss:String="";
     villeResidenceActuelle:String="";
     nationalite:String="";
     rememberMe:boolean=false;
-
+    about:String=""
+    identity:String="";
+    availability:number=0;
+    dateDeleted:String=""
+    
+    
     getPrintableName()
     {
         return this.prenom.length>0?this.prenom:this.nom
