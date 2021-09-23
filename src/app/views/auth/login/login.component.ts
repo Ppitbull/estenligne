@@ -10,12 +10,15 @@ import { MustMatch } from 'src/app/shared/utils/helpers/validators';
 export class LoginComponent implements OnInit {
   submitedForm:boolean=false;
   waitResponse=false;
+  errorText="";
+  successText="";
   form:FormGroup
   constructor(private formBuilder:FormBuilder) { }
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
-      emailOrPhoneNumber:new FormControl('',[Validators.required]),
+      email:new FormControl('',),
+      phoneNumber:new FormControl(''),
       password:new FormControl('',[Validators.required]),
     })
   }
