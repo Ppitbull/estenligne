@@ -26,8 +26,12 @@ export class LoginService {
   loginUser(email:string,password:string):Promise<ActionStatus>
   {
     return new Promise<ActionStatus>((resolve,reject)=>{
-      let user:User;
-
+      let user:User=new User();
+      user.hydrate({
+        email,
+        password,
+        phoneNumber:"+237000000000"
+      })
       this.authService.authLogin(user)
       .then((result:ActionStatus)=>{
         user=result.result;

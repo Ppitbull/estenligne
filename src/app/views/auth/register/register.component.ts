@@ -41,6 +41,8 @@ export class RegisterComponent implements OnInit {
   submitForm()
   {
     this.submitedForm=true;
+    this.errorText="";
+    this.successText="";
     if(this.form.value.email.length==0 && this.form.value.phoneNumber.length==0)
     {
       this.errorText="You must specify at least one value between email and phone number"
@@ -59,7 +61,7 @@ export class RegisterComponent implements OnInit {
       this.waitResponse=false;
       this.successText="Account created successful. Please login to continue..."
       this.errorText=""
-      setTimeout(()=>this.router.navigate(['login']),200)
+      setTimeout(()=>this.router.navigate(['login']),2000)
     })
     .catch((error:ActionStatus)=>{
       this.waitResponse=false;

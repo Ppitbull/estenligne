@@ -4,6 +4,7 @@ import { CreateUserProfilComponent } from './views/auth/create-user-profil/creat
 import { LoadUserDatasComponent } from './views/auth/load-user-datas/load-user-datas.component';
 import { LoginComponent } from './views/auth/login/login.component';
 import { RegisterComponent } from './views/auth/register/register.component';
+import { HomeComponent } from './views/home/home.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,14 @@ const routes: Routes = [
   {
     path:"chat",
     loadChildren:()=>import('./views/chat/chat.module').then((chat)=>chat.ChatModule)
+  },
+  {
+    path:'home',
+    component:HomeComponent
+  },
+  {
+    path:'**',
+    redirectTo:'home'
   }
 ];
 

@@ -13,13 +13,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDiscussInfosComponent } from './user-discuss-infos/user-discuss-infos.component';
 import { SearchUserBarComponent } from './search-user-bar/search-user-bar.component';
 import { InfosChatAppComponent } from './infos-chat-app/infos-chat-app.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ChatRoutingModule
+    ChatRoutingModule,
+    RouterModule
   ],
   declarations: [ 
     ChatComponent, 

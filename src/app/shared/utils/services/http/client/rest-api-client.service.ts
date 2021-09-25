@@ -60,7 +60,8 @@ export class RestApiClientService extends CustomHttpClient
                 {
                     body:request.getData(),
                     headers:r.headers,
-                    params:request.getParam()
+                    params:request.getParam(),
+                    observe:'response'
                 }
            )
            .subscribe((response:HttpResponse<Object>)=>{
@@ -76,8 +77,7 @@ export class RestApiClientService extends CustomHttpClient
                 resolve(actionResult);
             },
             (error:HttpErrorResponse)=>{
-                console.log("ResponseError ",error)
-                console.log("Error interne ",error.error)
+                console.log("Error interne ",error)
                 let r=new CError();
                 r.message=error.error instanceof ErrorEvent ? error.error.message: error.error
                 r.response.status(error.status)

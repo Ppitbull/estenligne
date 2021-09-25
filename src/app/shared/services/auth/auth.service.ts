@@ -6,6 +6,7 @@ import { User } from '../../entities/user';
 import { EventService } from '../../utils/services/events/event.service';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
+import { CResponse } from '../../utils/services/http/client/cresponse';
 import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 
@@ -94,6 +95,7 @@ export class AuthService {
       )
         .then((result: ActionStatus) => {
           let user:User=new User();
+          console.log("Result ",result)
           user.hydrate(result.result.getData());
           result.result = user;
           this.setAuth({isLoggedIn:true})
@@ -101,6 +103,22 @@ export class AuthService {
           resolve(result);
         })
         .catch((error: ActionStatus) => {
+          let actionStatus=new ActionStatus();
+          let response:CResponse=error.result.response;
+          switch (response.getStatus())
+          {
+            case 201:
+            case 200:
+            case 202:
+              return resolve(actionStatus);
+            case 400:
+              actionStatus.message= "One field missed"
+              actionStatus.apiCode=ActionStatus.INVALID_ARGUMENT_ERROR;
+            case 404:
+              actionStatus.message="Email/Phone number or password incorect";
+              actionStatus.apiCode=ActionStatus.RESSOURCE_NOT_FOUND_ERROR
+              return reject(actionStatus)
+          }
           reject(error);
         })
     });

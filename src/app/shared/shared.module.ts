@@ -4,6 +4,7 @@ import { InputTypeNumberModule } from './components/input-type-number/input-type
 import { SimpleLoaderComponent } from './components/loader/simple-loader/simple-loader.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
     CommonModule,
     InputTypeNumberModule,
     MatProgressBarModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   exports:[
     InputTypeNumberModule,

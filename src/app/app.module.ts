@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { CreateUserProfilComponent } from './views/auth/create-user-profil/create-user-profil.component';
 import { LoadUserDatasComponent } from './views/auth/load-user-datas/load-user-datas.component';
 import { SharedModule } from './shared/shared.module';
+import { HomeComponent } from './views/home/home.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedModule } from './shared/shared.module';
     RegisterComponent,
     LoginComponent,
     CreateUserProfilComponent,
-    LoadUserDatasComponent
+    LoadUserDatasComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
