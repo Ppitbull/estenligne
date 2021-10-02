@@ -53,7 +53,14 @@ export class AuthService {
   createAccount(user: User): Promise<ActionStatus> {
     // console.log(user)
     return new Promise((resolve, reject) => {
-     this.apiService.sendRequest(new CRequest().post().url("account/register").json().data(user.toString()))
+      let userJson=user.toString();
+      userJson.phoneNumber= userJson.phoneNumber.replaceAll(" ","");
+
+      if(userJson.email=="") delete userJson["email"];
+      if(userJson.phoneNumber=="") delete userJson["phoneNumber"]
+
+      console.log("Value user ",userJson)
+     this.apiService.sendRequest(new CRequest().post().url("account/register").json().data(userJson))
      .then((result:ActionStatus)=>{
        let actionStatus=new ActionStatus();
        switch (result.result.getStatus())
