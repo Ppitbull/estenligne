@@ -1,0 +1,15 @@
+.btn-submit
+{
+    display:flex;
+    align-items: center;
+    align-content: space-between;
+}
+
+mat-spinner
+{
+    margin-right: 5px;
+}
+
+.btn-submit ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: white;
+}

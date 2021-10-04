@@ -23,20 +23,14 @@ export class LoginService {
     private restApiService:RestApiClientService
   ) { }
 
-  loginUser(email:string,password:string):Promise<ActionStatus>
+  loginUser(user:User):Promise<ActionStatus>
   {
     return new Promise<ActionStatus>((resolve,reject)=>{
-      let user:User=new User();
-      user.hydrate({
-        email,
-        password,
-        phoneNumber:"+237000000000"
-      })
       this.authService.authLogin(user)
       .then((result:ActionStatus)=>{
         user=result.result;
         this.userProfil.setUser(user);
-        if(user.nom=="") result.code=ActionStatus.SUCCESS;        
+        if(user.nom=="") result.code=ActionStatus.SUCCESS;
         else result.code=ActionStatus.SUCCESS_END;
         this.eventService.loginEvent.next(true);
         return resolve(result);
@@ -51,9 +45,9 @@ export class LoginService {
   {
     return new Promise<ActionStatus>((resolve,reject)=>{
       this.restApiService.sendRequest(new CRequest()
-      .url("/deviceused?deviceplateform=4")
+      .url("deviceused?deviceplateform=4")
       .json()
-      .header("Set-Cookie",this.restApiService.headerKey.getValue().get("Set-Cookie"))
+      .header("Authorization",`Bearer ${this.restApiService.headerKey.getValue().get("token")}`)
       .put()
       )
       .then((result:ActionStatus)=>{

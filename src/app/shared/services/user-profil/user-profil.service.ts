@@ -4,6 +4,7 @@ import { EntityID } from '../../entities/entityid';
 import { User } from '../../entities/user';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
+import { CResponse } from '../../utils/services/http/client/cresponse';
 import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 import { UserService } from '../user/user.service';
@@ -20,16 +21,13 @@ export class UserProfilService {
     private userService:UserService,
     private restApi:RestApiClientService
     ) {
-    
+
     this.localStorageService.getSubjectByKey("user_profil").subscribe((userObj:any)=>{
-      let u1=new User();
-      u1.id.setId(1)
-      u1.nom="Joel";
-      this.currentUser.next(u1);
       if(userObj){
         let user:User=new User()
         user.hydrate(userObj)
         this.currentUser.next(user)
+        console.log("User ",user)
       }
     })
   }
@@ -55,7 +53,7 @@ export class UserProfilService {
         .catch((error:ActionStatus)=>reject(error))
       })
     }
-  
+
     resetDataUser(user)
     {
       // this.localStorageService.setUserData({
@@ -69,21 +67,32 @@ export class UserProfilService {
       return new Promise<ActionStatus>((resolve,reject)=>{
         this.restApi.sendRequest(
           new CRequest()
-          .url("/userprofile")
+          .url("userprofile")
           .json()
           .post()
-          .header("Set-Cookie",this.restApi.headerKey.getValue().get("Set-Cookie"))
+          .header("Authorization",`Bearer ${this.restApi.headerKey.getValue().get("token")}`)
           .data({
-            "identity":user.phoneNumber==""?user.email:user.phoneNumber,
+            "identity":this.currentUser.getValue().getIdentity(),
             "username":user.nom,
             "about":user.about
           })
         ).then((result:ActionStatus)=>{
+          console.log(result.result)
           user.hydrate(result.result.getData())
           this.currentUser.getValue().hydrate(user.toString());
           this.currentUser.next(this.currentUser.getValue())
+          result.result=this.currentUser.getValue()
+          resolve(result)
         })
-        .catch((error:ActionStatus)=>reject(error))
+        .catch((error:ActionStatus)=>{
+          let response:CResponse=error.result.response;
+          switch (response.getStatus())
+          {
+            case 409:
+              let result:ActionStatus=new ActionStatus();
+              return resolve(result)
+          }
+        })
       })
     }
 }

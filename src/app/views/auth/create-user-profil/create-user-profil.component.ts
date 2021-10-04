@@ -25,7 +25,7 @@ export class CreateUserProfilComponent implements OnInit {
 
   ngOnInit(): void {
     this.form=this.formBuilder.group({
-      pseudo:new FormControl('',[Validators.required]),
+      nom:new FormControl('',[Validators.required]),
       about:new FormControl('',[Validators.required]),
     })
   }
@@ -42,13 +42,16 @@ export class CreateUserProfilComponent implements OnInit {
     .then((result:ActionStatus)=>{
       this.errorText="";
       this.successText="Profil saved successfuly";
+      setTimeout(()=>{
+
+      },2000)
       return this.loginService.registerPlateform()
     })
     .then((result:ActionStatus)=>{
       this.waitResponse=false;
       this.errorText="";
       this.successText="Device saved successfuly";
-      setTimeout(()=>this.router.navigate(["load-data"]),200)
+      setTimeout(()=>this.router.navigate(["load-data"]),2000)
     })
     .catch((error:ActionStatus)=>{
       this.waitResponse=false;

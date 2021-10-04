@@ -54,12 +54,12 @@ export class AuthService {
     // console.log(user)
     return new Promise((resolve, reject) => {
       let userJson=user.toString();
-      userJson.phoneNumber= userJson.phoneNumber.replaceAll(" ","");
+      console.log("userJSON ",userJson)
+      userJson["phoneNumber"]= userJson.phoneNumber.replaceAll(" ","");
 
-      if(userJson.email=="") delete userJson["email"];
-      if(userJson.phoneNumber=="") delete userJson["phoneNumber"]
+      if(userJson["email"]=="") delete userJson["email"];
+      if(userJson["phoneNumber"]=="") delete userJson["phoneNumber"]
 
-      console.log("Value user ",userJson)
      this.apiService.sendRequest(new CRequest().post().url("account/register").json().data(userJson))
      .then((result:ActionStatus)=>{
        let actionStatus=new ActionStatus();
@@ -93,41 +93,50 @@ export class AuthService {
   // Login into your account
   authLogin(user:User): Promise<ActionStatus> {
     return new Promise((resolve, reject) => {
+      let userJson=user.toString();
+      userJson.phoneNumber= userJson.phoneNumber.replaceAll(" ","");
+
+      if(userJson.email=="") delete userJson["email"];
+      if(userJson.phoneNumber=="") delete userJson["phoneNumber"]
+
       this.apiService.sendRequest(
         new CRequest()
         .url("account/signin")
         .post()
         .json()
-        .data(user.toString())
+        .data(userJson)
       )
-        .then((result: ActionStatus) => {
-          let user:User=new User();
-          console.log("Result ",result)
-          user.hydrate(result.result.getData());
-          result.result = user;
-          this.setAuth({isLoggedIn:true})
-          this.apiService.setHeaderToStorage("cookies_auth",result.result.getHeader("Set-Cookie"))
-          resolve(result);
-        })
-        .catch((error: ActionStatus) => {
-          let actionStatus=new ActionStatus();
-          let response:CResponse=error.result.response;
-          switch (response.getStatus())
-          {
-            case 201:
-            case 200:
-            case 202:
-              return resolve(actionStatus);
-            case 400:
-              actionStatus.message= "One field missed"
-              actionStatus.apiCode=ActionStatus.INVALID_ARGUMENT_ERROR;
-            case 404:
-              actionStatus.message="Email/Phone number or password incorect";
-              actionStatus.apiCode=ActionStatus.RESSOURCE_NOT_FOUND_ERROR
-              return reject(actionStatus)
-          }
-          reject(error);
-        })
+      .then((result: ActionStatus) => {
+        let user:User=new User();
+        user.hydrate(result.result.getData());
+        this.setAuth({isLoggedIn:true})
+        console.log("Result Value",result.result)
+
+        this.apiService.setHeaderToStorage("token",result.result.getData()["token"])
+        console.log("Result Value",result)
+        result.result = user;
+        resolve(result);
+      })
+      .catch((error: ActionStatus) => {
+        let actionStatus=new ActionStatus();
+        console.log("Error V",error.result)
+        let response:CResponse=error.result.response;
+        switch (response.getStatus())
+        {
+          case 201:
+          case 200:
+          case 202:
+            return resolve(actionStatus);
+          case 400:
+            actionStatus.message= "One field missed"
+            actionStatus.apiCode=ActionStatus.INVALID_ARGUMENT_ERROR;
+          case 404:
+            actionStatus.message="Email/Phone number or password incorect";
+            actionStatus.apiCode=ActionStatus.RESSOURCE_NOT_FOUND_ERROR
+            return reject(actionStatus)
+        }
+        reject(error);
+      })
     });
   }
 }

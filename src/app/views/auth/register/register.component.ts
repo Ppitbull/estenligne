@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit {
     this.waitResponse=true;
     let user:User = new User()
     user.hydrate(this.form.value);
-    user.phoneNumber=this.form.value.phoneNumber.internationalNumber;
+    user.phoneNumber=this.form.value.phoneNumber.internationalNumber?this.form.value.phoneNumber.internationalNumber:"";
     user.rememberMe=this.form.value.rememberMe==""?false:true;
     this.authService.createAccount(user)
     .then((result:ActionStatus)=>{
@@ -64,6 +64,7 @@ export class RegisterComponent implements OnInit {
       setTimeout(()=>this.router.navigate(['login']),2000)
     })
     .catch((error:ActionStatus)=>{
+      console.log("Error ",error)
       this.waitResponse=false;
       this.errorText=error.message;
       this.successText="";

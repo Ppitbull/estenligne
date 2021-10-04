@@ -20,8 +20,14 @@ export class User extends Entity
     identity:String="";
     availability:number=0;
     dateDeleted:String=""
-    
-    
+
+
+    getIdentity()
+    {
+      if(this.identity=="") return this.phoneNumber==""?this.email:this.phoneNumber
+      return this.identity
+    }
+
     getPrintableName()
     {
         return this.prenom.length>0?this.prenom:this.nom

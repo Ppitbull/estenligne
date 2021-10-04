@@ -1,6 +1,6 @@
 /**
  * @description Cette classe est un outils pour acceder a tout api Rest et est basé sur le package
- *  axios (https://www.npmjs.com/package/axios) 
+ *  axios (https://www.npmjs.com/package/axios)
  * @author Cédric Nguendap
  * @created 17/11/2020
  */
@@ -22,8 +22,8 @@ export class RestApiClientService extends CustomHttpClient
 {
     apiUrl="https://estenligne.com:44364/api"
 
-    headerKey:BehaviorSubject<Map<String,any>>=new BehaviorSubject<Map<String,any>>(new Map()); 
-    
+    headerKey:BehaviorSubject<Map<String,any>>=new BehaviorSubject<Map<String,any>>(new Map());
+
     constructor(private http:HttpClient,
         private localStorageService:LocalStorageService){
         super();
@@ -36,7 +36,7 @@ export class RestApiClientService extends CustomHttpClient
             this.headerKey.next(newMap);
         })
     }
-    
+
     setHeaderToStorage(key:String,value:any)
     {
         this.headerKey.getValue().set(key,value);
@@ -64,13 +64,13 @@ export class RestApiClientService extends CustomHttpClient
                     observe:'response'
                 }
            )
-           .subscribe((response:HttpResponse<Object>)=>{
+           .subscribe((response)=>{
                console.log("Response ",response)
                 let r=new CResponse();
                 r.data(response.body)
                 .status(response.status)
                 .statusText(response.statusText)
-                // response.headers.keys().forEach((currentValue)=> r.header(currentValue,response.headers.get(currentValue)))
+                response.headers.keys().forEach((currentValue)=> r.header(currentValue,response.headers.get(currentValue)))
                 actionResult.apiCode=ActionStatus.SUCCESS;
                 actionResult.message=response.statusText;
                 actionResult.result=r;
