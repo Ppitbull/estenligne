@@ -127,13 +127,18 @@ export class AuthService {
           case 200:
           case 202:
             return resolve(actionStatus);
+          case 401:
+            actionStatus.message="Unconfirmed account";
+            actionStatus.apiCode=ActionStatus.NOT_VALID_ACCOUNT_ERROR
+            return resolve(actionStatus)
           case 400:
-            actionStatus.message= "One field missed"
+            actionStatus.message= "Email/Phone number or password incorect"
             actionStatus.apiCode=ActionStatus.INVALID_ARGUMENT_ERROR;
           case 404:
-            actionStatus.message="Email/Phone number or password incorect";
+            actionStatus.message="Account not found";
             actionStatus.apiCode=ActionStatus.RESSOURCE_NOT_FOUND_ERROR
-            return reject(actionStatus)
+
+          return reject(actionStatus)
         }
         reject(error);
       })

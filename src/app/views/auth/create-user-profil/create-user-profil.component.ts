@@ -42,15 +42,6 @@ export class CreateUserProfilComponent implements OnInit {
     .then((result:ActionStatus)=>{
       this.errorText="";
       this.successText="Profil saved successfuly";
-      setTimeout(()=>{
-
-      },2000)
-      return this.loginService.registerPlateform()
-    })
-    .then((result:ActionStatus)=>{
-      this.waitResponse=false;
-      this.errorText="";
-      this.successText="Device saved successfuly";
       setTimeout(()=>this.router.navigate(["load-data"]),2000)
     })
     .catch((error:ActionStatus)=>{

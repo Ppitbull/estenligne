@@ -4,7 +4,7 @@ import { Method } from "../http-method.type";
 
 export class CRequest extends Entity
 {
-    headerData:Record<string | number,string>={}; 
+    headerData:Record<string | number,string>={};
     requestType:String="json";
     dataObj:any=null;
     accesstoken:any=null;
@@ -31,6 +31,11 @@ export class CRequest extends Entity
     {
         this.method="put";
         return this;
+    }
+    patch():CRequest
+    {
+      this.method="patch";
+      return this;
     }
     delete():CRequest
     {
@@ -109,14 +114,14 @@ export class CRequest extends Entity
                 formData.append(i.toString(),this.dataObj[i])
             }
         }
-        else 
+        else
         {
             formData.append("data",this.dataObj);
         }
         return formData;
     }
 
-    toString() 
+    toString()
     {
         let data={};
         if(this.requestType=="form-data") data= this.toFormData();
@@ -128,8 +133,8 @@ export class CRequest extends Entity
             data,
             requestType:this.requestType
         }
-    } 
-    getData()   
+    }
+    getData()
     {
         if(this.method=="get") return "";
         if(this.method=="post") return this.toJSON()

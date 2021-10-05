@@ -8,6 +8,7 @@ import { ActionStatus } from '../../utils/services/firebase';
 import { User } from '../../entities/user';
 import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
 import { CRequest } from '../../utils/services/http/client/crequest';
+import { CResponse } from '../../utils/services/http/client/cresponse';
 
 
 @Injectable({
@@ -30,7 +31,7 @@ export class LoginService {
       .then((result:ActionStatus)=>{
         user=result.result;
         this.userProfil.setUser(user);
-        if(user.nom=="") result.code=ActionStatus.SUCCESS;
+        if(result.apiCode==ActionStatus.NOT_VALID_ACCOUNT_ERROR) result.code=ActionStatus.SUCCESS;
         else result.code=ActionStatus.SUCCESS_END;
         this.eventService.loginEvent.next(true);
         return resolve(result);
@@ -51,7 +52,9 @@ export class LoginService {
       .put()
       )
       .then((result:ActionStatus)=>{
-        resolve(new ActionStatus())
+        let response:CResponse=result.result
+        result.result=response.getData();
+        resolve(result)
       })
       .catch((error:ActionStatus)=>reject(error))
     })

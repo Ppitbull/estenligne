@@ -10,6 +10,7 @@ export class ActionStatus {
   static UNKNOW_ERROR = -10;
   static INVALID_ARGUMENT_ERROR = -3;
   static RESSOURCE_ALREADY_EXIST_ERROR = -4;
+  static NOT_VALID_ACCOUNT_ERROR=-5;
   static SUCCESS = 0;
   static UPLOAD_PAUSED=10;
   static UPLOAD_RUNNING=11;
