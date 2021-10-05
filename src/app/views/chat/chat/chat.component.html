@@ -8,12 +8,64 @@
           </div>
           <div class="col-8"></div>
           <div class="col-1 align-self-center">
-            <i class="fas fa-ellipsis-v"></i>
-          </div>        
+            <div class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ellipsis-v"></i>
+
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+								<div class="dropdown-menu-header">
+
+								</div>
+								<div class="list-group">
+
+									<a href="#" class="list-group-item icons">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+                        <i class="fa fa-users icon text-success"></i>
+												<!-- <i class="fas fa- text-success"></i> -->
+											</div>
+											<div class="col-10">
+												<div class="text-dark">New group</div>
+												<div class="text-muted small mt-1">Create a new group</div>
+											</div>
+										</div>
+									</a>
+                  <a href="#" class="list-group-item icons">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+                        <i class="fa fa-cog icon text-primary"></i>
+												<!-- <i class="fas fa- text-success"></i> -->
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Setting</div>
+												<div class="text-muted small mt-1">Custom the app</div>
+
+											</div>
+										</div>
+									</a>
+                  <a href="#" class="list-group-item icons">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+                        <i class="fa fa-sign-out-alt icon text-danger"></i>
+												<!-- <i class="fas fa- text-success"></i> -->
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Logout</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<!-- <a href="#" class="text-muted">Show all notifications</a> -->
+								</div>
+							</div>
+						</div>
+          </div>
         </div>
       </div>
-    </div>  
-    
+    </div>
+
     <div class="row search-user-bar align-self-center justify-content-center">
       <div class="col-12">
           <div class="row justify-content-center">
@@ -22,7 +74,7 @@
             </div>
           </div>
       </div>
-    </div>   
+    </div>
 
     <div class="row messages-box bg-white">
       <div class="col-12">
@@ -54,7 +106,7 @@
     <ng-container *ngIf="hasSelectedDiscuss==false">
       <app-infos-chat-app></app-infos-chat-app>
     </ng-container>
-    
+
   </div>
 </div>
 
