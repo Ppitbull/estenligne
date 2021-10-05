@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ItemGroupMessageComponent } from './item-group-message/item-group-message.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TypingZoneComponent,
     ListUserMessageComponent,
     ItemUserMessageComponent,
-    DisplayMessagesComponent, UserDiscussInfosComponent, SearchUserBarComponent, InfosChatAppComponent, AddGroupComponent
+    DisplayMessagesComponent, UserDiscussInfosComponent, SearchUserBarComponent, InfosChatAppComponent, AddGroupComponent, ItemGroupMessageComponent
   ]
 })
 export class ChatModule { }

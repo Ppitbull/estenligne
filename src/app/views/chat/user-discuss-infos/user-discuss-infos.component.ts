@@ -23,17 +23,17 @@ export class UserDiscussInfosComponent implements OnInit,OnChanges {
     if(this.selectedDiscuss.type==DiscussionType.GROUP_DISCUSSION)
     {
       this.imgSrc=this.chatService.getLocalDiscutionById(this.selectedDiscuss.idDiscuss).ppurl;
-      this.discName=this.chatService.getLocalDiscutionById(this.selectedDiscuss.idDiscuss).name
+      this.discName=this.chatService.getLocalDiscutionById(this.selectedDiscuss.idDiscuss).groupName
       Promise.all(this.chatService.getLocalDiscutionById(this.selectedDiscuss.idDiscuss).userMembers.map((userID)=>this.userService.getUserById(userID)))
       .then((value:ActionStatus[])=>{
         this.detail=value.map((action)=>action.result.getPrintableIdentity()).reduce((acc:String,currValue:String)=>`${currValue}, ${acc}`,[])
       })
     }
-    else 
+    else
     {
       this.imgSrc=this.selectedDiscuss.user.photoUrl;
       this.discName=this.selectedDiscuss.user.getFullName()
-            
+
     }
   }
 

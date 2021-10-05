@@ -1,12 +1,23 @@
 <div class="list-group rounded-0">
-        <app-item-user-message 
-        *ngFor="let user of listUser"
-            [lastMessage]="user.lastMessage.content"
-            [online]="user.online"
-            [active]="shouldActive(user)"
-            [user]="user.user"
-            (selected)="selectUser($event)"
-            [idDiscuss]="user.idDiscuss"
-            [lengthMessage]="user.unreadLenght"
-        ></app-item-user-message>
+  <ng-container *ngFor="let user of listUser">
+    <app-item-user-message
+        *ngIf="user.type=='private_discussion'"
+        [lastMessage]="user.lastMessage.content"
+        [online]="user.online"
+        [active]="shouldActive(user)"
+        [user]="user.user"
+        (selected)="selectUser($event)"
+        [idDiscuss]="user.idDiscuss"
+        [lengthMessage]="user.unreadLenght"
+    ></app-item-user-message>
+    <app-item-group-message
+        *ngIf="user.type=='group_discussion'"
+        [lastMessage]="user.lastMessage.content"
+        [active]="shouldActive(user)"
+        (selected)="selectUser($event)"
+        [idDiscuss]="user.idDiscuss"
+        [lengthMessage]="user.unreadLenght"
+    ></app-item-group-message>
+  </ng-container>
+
 </div>

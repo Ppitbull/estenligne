@@ -64,13 +64,14 @@ export class ChatComponent implements OnInit {
         let d:DiscussionItem={};
         d.idDiscuss=discuss.id;
         d.type=discuss.type
+        d.lastMessage=new Message();
+        d.user=new User()
         if(discuss.type==DiscussionType.PRIVATE_DISCUSSION)
         {
           if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString())
           {
             this.userService.getUserById(discuss.userMembers[0]).then((result:ActionStatus)=> {
               d.user=result.result
-              d.lastMessage=discuss.chats[discuss.chats.length-1];
               d.unreadLenght=this.chatService.getNumberOfUnReadMessageByIdDiscuss(discuss.id)
               this.userDiscussionList.push(d);
               if(this.selectedDiscussion.getValue()!=null

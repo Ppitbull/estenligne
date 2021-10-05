@@ -1,0 +1,21 @@
+.active{
+  background-color: rgb(206, 206, 206) !important;
+  color: rgb(151, 137, 137) !important;
+  /* border-radius: 8px 8px 8px 8px !important; */
+}
+
+.user-name
+{
+  font-size: 18px;
+  font-family: 'Times New Roman', Times, serif;
+  margin-bottom: 5px !important;
+}
+
+.msg-number{
+  background-color: rgb(0 , 98, 165);
+  color: white;
+  margin: 5px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 50%;
+}

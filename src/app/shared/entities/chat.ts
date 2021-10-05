@@ -22,6 +22,14 @@ export class Message extends Entity
     messageSendState:MessageSendState=MessageSendState.TRYING_SENDING;
     idDiscussion:EntityID=new EntityID()
 
+    static build(msgObj):Message
+    {
+      let msg:Message=new Message();
+      msg.id.setId(msgObj.id);
+      msg.from.setId(msgObj.senderId);
+      msg.content.data=msgObj.shortBody
+      return msg
+    }
     hydrate(entity: Record<string | number,any>):void
     {
         for(const key of Object.keys(entity))
@@ -54,13 +62,13 @@ export class Message extends Entity
 export class Discussion extends Entity
 {
     userMembers:EntityID[]=[]
-    name:string=""
+    groupName:string=""
     chats:Message[]=[];
     read:ChatReadState=ChatReadState.UNREAD;
     type:DiscussionType=DiscussionType.PRIVATE_DISCUSSION;
     ppurl:String="assets/img/img_group.png";
     about="";
-    createdDate:String=""
+    dateCreated:String=""
 
     toString()
     {
@@ -69,6 +77,7 @@ export class Discussion extends Entity
         {
             if(k=="userMembers") r[k]=this.userMembers.map((user)=>user.toString())
             if(k=="chats") r[k]=this.chats.map((msg)=>msg.toString());
+            if(k=="id") r[k]=this.id.toString()
             else r[k]=Reflect.get(this,k);
         }
         return r;
@@ -91,6 +100,26 @@ export class Discussion extends Entity
                 })
             else if(Reflect.has(this,key)) Reflect.set(this,key,entity[key]);
         }
+    }
+    static builder(obj):Discussion
+    {
+      let d:Discussion;
+      if(obj.type==2) d=new GroupDiscussion();
+      else d=new Discussion();
+      // d.hydrate(obj);
+      d.id.setId(obj.id);
+      d.groupName=obj.name;
+      if(obj.photoFileName) d.ppurl=obj.photoFileName
+      return d;
+    }
+
+    static internalBuilder(obj):Discussion
+    {
+      let d:Discussion;
+      if(obj.type==DiscussionType.GROUP_DISCUSSION) d=new GroupDiscussion();
+      else d=new Discussion();
+      d.hydrate(obj);
+      return d;
     }
 }
 

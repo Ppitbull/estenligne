@@ -45,9 +45,8 @@ export class AddGroupComponent implements OnInit {
     let group:GroupDiscussion=new GroupDiscussion();
     group.userMembers.push(this.userProfilService.currentUser.getValue().id)
     group.about=this.groupForm.value.groupAbout;
-    group.name=this.groupForm.value.groupName
-    group.createdDate=(new Date()).toISOString();
-    this.chatService.createNewDiscution(group)
+    group.groupName=this.groupForm.value.groupName
+    group.dateCreated=(new Date()).toISOString();
     this.chatService.createNewDiscution(group)
     .then((result:ActionStatus)=>{
       this.close();

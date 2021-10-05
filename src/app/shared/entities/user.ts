@@ -3,7 +3,7 @@ import { Entity } from "./entity";
 
 export class User extends Entity
 {
-    nom:String="";
+    username:String="";
     prenom:String="";
     sexe:String="";
     email:String="";
@@ -30,11 +30,11 @@ export class User extends Entity
 
     getPrintableName()
     {
-        return this.prenom.length>0?this.prenom:this.nom
+        return this.prenom.length>0?this.prenom:this.username
     }
     getFullName()
     {
-        return `${this.prenom} ${this.nom}`
+        return `${this.prenom} ${this.username}`
     }
 
     getPrintableIdentity()

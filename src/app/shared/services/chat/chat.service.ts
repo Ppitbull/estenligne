@@ -9,7 +9,9 @@ import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
 import { CResponse } from '../../utils/services/http/client/cresponse';
 import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
+import { LocalStorageService } from '../localstorage/localstorage.service';
 import { UserProfilService } from '../user-profil/user-profil.service';
+import { MessageService } from './messages.service';
 
 @Injectable({
     providedIn: 'root'
@@ -20,26 +22,44 @@ export class ChatService {
     constructor(
         private eventService:EventService,
         private restApiService:RestApiClientService,
-        private userProfilService:UserProfilService
+        private userProfilService:UserProfilService,
+        private localStorageService:LocalStorageService,
+        private messageService:MessageService
         )
     {
-        let discussList=[];
+      this.localStorageService.getSubjectByKey("discuss_list").subscribe((discussObj)=>{
+        this.listDiscusions.next(discussObj.map(d => Discussion.internalBuilder(d)))
+      })
 
-        this.listDiscusions.next(discussList)
     }
+
+    setDiscussion(discuss:Discussion[])
+    {
+      this.localStorageService.setData("discuss_list",discuss.map((d)=>d.toString()));
+    }
+
+
 
     getAllDiscutionList(): Promise<ActionStatus> {
         return new Promise<ActionStatus>((resolve, reject) => {
             this.restApiService.sendRequest(
               new CRequest()
               .get()
-              .url(`chatroom/getall?${this.userProfilService.currentUser.getValue().id.toString()}`)
+              .url(`chatroom/getall?userprofileid=${this.userProfilService.currentUser.getValue().id.toString()}`)
               .header("Authorization",`Bearer ${this.restApiService.headerKey.getValue().get("token")}`)
             )
             .then((result:ActionStatus)=>
             {
               let response:CResponse=result.result;
-              console.log("Chat room data",response.getData())
+              this.setDiscussion(response.getData().map((d)=>{
+                let disc=Discussion.builder(d);
+                if(d.latestMessage.id!=0)
+                {
+                  let message:Message=Message.build(d.latestMessage);
+                  disc.chats.push(message)
+                }
+                return disc
+              }))
               resolve(new ActionStatus())
             })
             .catch((error:ActionStatus)=>{
@@ -82,14 +102,17 @@ export class ChatService {
           .json()
           .data({
             creatorId:discuss.userMembers[0].toString(),
-            groupName:discuss.name,
-            about:discuss.about,
-            dateCreated:discuss.createdDate
+            ...discuss.toString(),
           })
         )
         .then((result:ActionStatus)=>{
-
+          let response:CResponse=result.result;
+          discuss.id.setId(response.getData()["groupProfileId"]);
+          this.listDiscusions.getValue().push(discuss);
+          this.setDiscussion(this.listDiscusions.getValue())
+          resolve(new ActionStatus());
         })
+        .catch((error:ActionStatus)=>reject(error))
       })
     }
 

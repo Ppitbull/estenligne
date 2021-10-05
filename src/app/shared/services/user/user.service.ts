@@ -24,21 +24,8 @@ export class UserService {
     private localStorageService:LocalStorageService,
     private apiService:RestApiClientService
   ) {
-    
+
     this.localStorageService.getSubjectByKey("data_users").subscribe((value)=>{
-
-      //--------------------------Data Test -----------------------------------------------
-      let u1=new User();
-      u1.id.setId(0);
-      u1.nom="Cédric"
-      this.listUser.set(0,u1);
-
-      let u2=new User();
-      u2.id.setId(1)
-      u2.nom="Joel";
-      this.listUser.set(1,u2);
-      this.usersSubject.next(this.listUser)
-  //--------------------------Data Test -----------------------------------------------
 
       if(!value) return;
       value.forEach((userObj)=>{
@@ -103,9 +90,9 @@ export class UserService {
 
   updateUser(user: User): Promise<ActionStatus> {
     return new Promise<ActionStatus>((resolve, reject) => {
-      
+
     });
   }
-  
+
 
 }

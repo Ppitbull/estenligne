@@ -73,7 +73,7 @@ export class UserProfilService {
           .header("Authorization",`Bearer ${this.restApi.headerKey.getValue().get("token")}`)
           .data({
             "identity":this.currentUser.getValue().getIdentity(),
-            "username":user.nom,
+            "username":user.username,
             "about":user.about
           })
         ).then((result:ActionStatus)=>{
