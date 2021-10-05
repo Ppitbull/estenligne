@@ -14,6 +14,9 @@ import { UserDiscussInfosComponent } from './user-discuss-infos/user-discuss-inf
 import { SearchUserBarComponent } from './search-user-bar/search-user-bar.component';
 import { InfosChatAppComponent } from './infos-chat-app/infos-chat-app.component';
 import { RouterModule } from '@angular/router';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AddGroupComponent } from './add-group/add-group.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -21,16 +24,18 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     ChatRoutingModule,
-    RouterModule
+    RouterModule,
+    MatProgressSpinnerModule,
+    ModalModule.forRoot()
   ],
-  declarations: [ 
-    ChatComponent, 
+  declarations: [
+    ChatComponent,
     ReceivedMessageComponent,
-    SendMessageComponent, 
-    TypingZoneComponent, 
-    ListUserMessageComponent, 
-    ItemUserMessageComponent, 
-    DisplayMessagesComponent, UserDiscussInfosComponent, SearchUserBarComponent, InfosChatAppComponent 
+    SendMessageComponent,
+    TypingZoneComponent,
+    ListUserMessageComponent,
+    ItemUserMessageComponent,
+    DisplayMessagesComponent, UserDiscussInfosComponent, SearchUserBarComponent, InfosChatAppComponent, AddGroupComponent
   ]
 })
 export class ChatModule { }

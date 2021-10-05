@@ -5,12 +5,13 @@ import { SimpleLoaderComponent } from './components/loader/simple-loader/simple-
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { SelectUserComponent } from './components/select-user/select-user.component';
 
 
 
 @NgModule({
   declarations: [
-    SimpleLoaderComponent
+    SimpleLoaderComponent,
   ],
   imports: [
     CommonModule,

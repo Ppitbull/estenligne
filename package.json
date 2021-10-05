@@ -23,6 +23,7 @@
     "@angular/router": "~11.2.5",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.5.3",
+    "choices.js": "^9.0.1",
     "feather-icons": "^4.28.0",
     "google-libphonenumber": "^3.2.22",
     "intl-tel-input": "^17.0.3",

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { Discussion, Message } from '../../entities/chat';
+import { Discussion, GroupDiscussion, Message } from '../../entities/chat';
 import { EntityID } from '../../entities/entityid';
-import { ChatReadState, MessageContentType } from '../../enum/chat.enum';
+import { ChatReadState, DiscussionType, MessageContentType } from '../../enum/chat.enum';
 import { EventService } from '../../utils/services/events/event.service';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
@@ -56,6 +56,47 @@ export class ChatService {
         .chats
         .filter((message:Message)=>message.read==ChatReadState.UNREAD)
         .length
+    }
+
+    createNewPrivateDiscution(discuss):Promise<ActionStatus>
+    {
+      return new Promise<ActionStatus>((resolve,reject)=>{
+        this.restApiService.sendRequest(
+          new CRequest()
+          .post()
+          .url(`chatroom/createprivate?userprofileid=${discuss.userMembers?.[1]?.toString()}&emailAddress=${this.userProfilService.currentUser.getValue().getIdentity()}`)
+          .header("Authorization",`Bearer ${this.restApiService.headerKey.getValue().get("token")}`)
+          .json()
+        )
+      })
+    }
+
+    createNewGroupDiscution(discuss:Discussion):Promise<ActionStatus>
+    {
+      return new Promise<ActionStatus>((resolve,reject)=>{
+        this.restApiService.sendRequest(
+          new CRequest()
+          .post()
+          .url("groupprofile")
+          .header("Authorization",`Bearer ${this.restApiService.headerKey.getValue().get("token")}`)
+          .json()
+          .data({
+            creatorId:discuss.userMembers[0].toString(),
+            groupName:discuss.name,
+            about:discuss.about,
+            dateCreated:discuss.createdDate
+          })
+        )
+        .then((result:ActionStatus)=>{
+
+        })
+      })
+    }
+
+    createNewDiscution(discuss:Discussion):Promise<ActionStatus>
+    {
+        if(discuss.type==DiscussionType.PRIVATE_DISCUSSION) return this.createNewPrivateDiscution(discuss)
+        else return this.createNewGroupDiscution(discuss)
     }
 
     getLocalDiscutionById(idDiscussion: EntityID): Discussion {

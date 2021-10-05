@@ -48,7 +48,7 @@ export class Message extends Entity
         return r;
     }
 
-   
+
 }
 
 export class Discussion extends Entity
@@ -59,6 +59,8 @@ export class Discussion extends Entity
     read:ChatReadState=ChatReadState.UNREAD;
     type:DiscussionType=DiscussionType.PRIVATE_DISCUSSION;
     ppurl:String="assets/img/img_group.png";
+    about="";
+    createdDate:String=""
 
     toString()
     {
@@ -88,12 +90,11 @@ export class Discussion extends Entity
                     return m;
                 })
             else if(Reflect.has(this,key)) Reflect.set(this,key,entity[key]);
-        }       
+        }
     }
 }
 
 export class GroupDiscussion extends Discussion
 {
     type:DiscussionType=DiscussionType.GROUP_DISCUSSION;
-    description="";
 }

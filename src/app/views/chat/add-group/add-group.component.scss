@@ -1,0 +1,38 @@
+.modal-dialog
+{
+  margin-top: 0px !important;
+  margin-bottom: 10px;
+
+}
+.modal-content
+{
+  border: 0px !important;
+}
+
+.modal-header,
+.modal-footer
+{
+  padding-bottom:0px!important;
+}
+
+
+.modal-footer
+{
+  justify-content: space-between;
+}
+
+.btn-submit
+{
+    display:flex;
+    align-items: center;
+    align-content: space-between;
+}
+
+mat-spinner
+{
+    margin-right: 5px;
+}
+
+.btn-submit ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: white;
+}

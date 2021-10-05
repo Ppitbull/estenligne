@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { BehaviorSubject } from 'rxjs';
 import { Discussion, Message } from 'src/app/shared/entities/chat';
 import { EntityID } from 'src/app/shared/entities/entityid';
@@ -9,6 +10,7 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { UserProfilService } from 'src/app/shared/services/user-profil/user-profil.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { ActionStatus } from 'src/app/shared/utils/services/firebase';
+import { AddGroupComponent } from '../add-group/add-group.component';
 
 export interface DiscussionItem
 {
@@ -25,7 +27,7 @@ export interface DiscussionMessage
   from?:User,
   to?:User,
   senderIsAuthUser?:boolean,
-  message?:Message 
+  message?:Message
 }
 
 @Component({
@@ -41,11 +43,12 @@ export class ChatComponent implements OnInit {
   selectedDiscussionValueItem:DiscussionItem=null;
   hasSelectedDiscuss:boolean=false;
   messageToDisplay:DiscussionMessage[]=[];
-  
+
   constructor(
     private chatService:ChatService,
     private userService: UserService,
-    private userProfilService:UserProfilService
+    private userProfilService:UserProfilService,
+    private modalService:BsModalService
     ) { }
 
 
@@ -63,25 +66,25 @@ export class ChatComponent implements OnInit {
         d.type=discuss.type
         if(discuss.type==DiscussionType.PRIVATE_DISCUSSION)
         {
-          if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString()) 
+          if(discuss.userMembers[0].toString()!=this.userProfilService.currentUser.getValue().id.toString())
           {
             this.userService.getUserById(discuss.userMembers[0]).then((result:ActionStatus)=> {
-              d.user=result.result        
+              d.user=result.result
               d.lastMessage=discuss.chats[discuss.chats.length-1];
               d.unreadLenght=this.chatService.getNumberOfUnReadMessageByIdDiscuss(discuss.id)
-              this.userDiscussionList.push(d); 
-              if(this.selectedDiscussion.getValue()!=null 
+              this.userDiscussionList.push(d);
+              if(this.selectedDiscussion.getValue()!=null
                 && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss(d)
             })
           }
           else this.userService.getUserById(discuss.userMembers[1]).then((result:ActionStatus)=> {
             d.lastMessage=discuss.chats[discuss.chats.length-1];
             d.user=result.result
-            this.userDiscussionList.push(d); 
-            if(this.selectedDiscussion.getValue()!=null 
+            this.userDiscussionList.push(d);
+            if(this.selectedDiscussion.getValue()!=null
               && discuss.id.toString()==this.selectedDiscussion.getValue().id.toString()) this.selectedUserDiscuss(d)
           })
-          
+
         }
         else
         {
@@ -137,6 +140,21 @@ export class ChatComponent implements OnInit {
   //   console.log("new message ",message);
   }
 
+  newGroupUI()
+  {
+    this.modalService.show(AddGroupComponent,
+      {
+        backdrop: true,
+        ignoreBackdropClick: true
+      })
+  }
+  settingUI()
+  {
 
+  }
 
+  logout()
+  {
+
+  }
 }
