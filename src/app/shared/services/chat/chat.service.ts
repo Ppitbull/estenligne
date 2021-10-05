@@ -5,6 +5,11 @@ import { Discussion, Message } from '../../entities/chat';
 import { EntityID } from '../../entities/entityid';
 import { ChatReadState, MessageContentType } from '../../enum/chat.enum';
 import { EventService } from '../../utils/services/events/event.service';
+import { ActionStatus } from '../../utils/services/firebase';
+import { CRequest } from '../../utils/services/http/client/crequest';
+import { CResponse } from '../../utils/services/http/client/cresponse';
+import { RestApiClientService } from '../../utils/services/http/client/rest-api-client.service';
+import { UserProfilService } from '../user-profil/user-profil.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,38 +19,32 @@ export class ChatService {
 
     constructor(
         private eventService:EventService,
-        ) 
+        private restApiService:RestApiClientService,
+        private userProfilService:UserProfilService
+        )
     {
         let discussList=[];
-        let d1=new Discussion();
-
-        let md1=new Message();
-        md1.content={type:MessageContentType.TEXT_MESSAGE,data:"Bonjour Cédric"};
-        md1.from.setId(0);
-        md1.to.setId(1);
-        md1.date="02/21/2021"
-
-        d1.read=ChatReadState.READ;
-        d1.userMembers.push(new EntityID(),new EntityID())
-        d1.userMembers[0].setId(0);
-        d1.userMembers[1].setId(1);
-        d1.chats.push(md1)
-
-        discussList.push(d1)
 
         this.listDiscusions.next(discussList)
     }
 
-    getDiscutionList(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            // this.api.get('chat/list', this.headers)
-            //     .subscribe((success) => {
-            //         if (success && success.resultCode == 0) {
-            //             success.result.forEach((disc) => this.listDiscusion.push(Discussion.hydrate(disc)));
-            //             resolve(true);
-            //         }
-            //         else  reject(success);
-            //     }, (error: any) => reject(error));
+    getAllDiscutionList(): Promise<ActionStatus> {
+        return new Promise<ActionStatus>((resolve, reject) => {
+            this.restApiService.sendRequest(
+              new CRequest()
+              .get()
+              .url(`chatroom/getall?${this.userProfilService.currentUser.getValue().id.toString()}`)
+              .header("Authorization",`Bearer ${this.restApiService.headerKey.getValue().get("token")}`)
+            )
+            .then((result:ActionStatus)=>
+            {
+              let response:CResponse=result.result;
+              console.log("Chat room data",response.getData())
+              resolve(new ActionStatus())
+            })
+            .catch((error:ActionStatus)=>{
+              reject(error)
+            })
         });
     }
 
@@ -76,7 +75,7 @@ export class ChatService {
 
     markAsRead(idMessage: String, idDiscussion: String): Promise<any> {
         return new Promise((resolve, reject) => {
-           
+
         });
     }
 
@@ -85,7 +84,7 @@ export class ChatService {
         console.log(this.listDiscusions.getValue())
         this.listDiscusions.next(this.listDiscusions.getValue());
         return new Promise((resolve, reject) => {
-            
+
         });
     }
 }
