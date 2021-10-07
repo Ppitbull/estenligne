@@ -11,7 +11,7 @@ import { FireBaseConstant } from './firebase-constant'
 })
 export class FirebaseDataBaseApi {
   static firebaseConfig: any = {};
-  
+
 
   debug: boolean = false;
   offlineMode: boolean = false;
@@ -22,13 +22,12 @@ export class FirebaseDataBaseApi {
     if (isDevMode()) {
       console.log("Dev Mode")
       FirebaseDataBaseApi.firebaseConfig= {
-        apiKey: "AIzaSyA-y3v-5G60iDXZ54ZVD7MvkUM1-j8QXKM",
-        authDomain: "udm-inscription-test-db.firebaseapp.com",
-        projectId: "udm-inscription-test-db",
-        storageBucket: "udm-inscription-test-db.appspot.com",
-        messagingSenderId: "874618326460",
-        appId: "1:874618326460:web:b1e911f1688cfb7e27efb9",
-        measurementId: "G-Y8CT85KKRJ"
+        apiKey: "AIzaSyBZsYMP0JCT5qYXAf-ptlEWnTVXW2CPhv4",
+        authDomain: "rhyscitlema-chatonline.firebaseapp.com",
+        projectId: "rhyscitlema-chatonline",
+        storageBucket: "rhyscitlema-chatonline.appspot.com",
+        messagingSenderId: "310036780903",
+        appId: "1:310036780903:web:e65c228dc6a65173bd41c2"
       };
     }
     else
@@ -44,7 +43,7 @@ export class FirebaseDataBaseApi {
         measurementId: "G-JELPVPNT34"
         };
     }
-  
+
     // Initialize Firebase
     firebase.initializeApp(FirebaseDataBaseApi.firebaseConfig);
     // firebase.analytics();

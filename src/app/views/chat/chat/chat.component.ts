@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Discussion, Message } from 'src/app/shared/entities/chat';
 import { EntityID } from 'src/app/shared/entities/entityid';
 import { User } from 'src/app/shared/entities/user';
-import { DiscussionType } from 'src/app/shared/enum/chat.enum';
+import { DiscussionType, MessageSendState } from 'src/app/shared/enum/chat.enum';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { UserProfilService } from 'src/app/shared/services/user-profil/user-profil.service';
@@ -99,14 +99,15 @@ export class ChatComponent implements OnInit {
     this.messageToDisplay =[];
     let selectedDiscussion:Discussion = this.discusionList.find((disc:Discussion)=>userDiscuss.idDiscuss.toString()==disc.id.toString());
     this.selectedDiscussion.next(selectedDiscussion);
+    console.log("Selected Discuss ",selectedDiscussion)
     selectedDiscussion.chats.forEach((message:Message)=>{
-      Promise.all([this.userService.getUserById(message.from),this.userService.getUserById(message.to)])
-      .then((results:ActionStatus[])=>{
+      console.log("Message ",message )
+      this.userService.getUserById(message.from)
+      .then((results:ActionStatus)=>{
         this.messageToDisplay.push({
-          from:results[0].result,
-          to:results[1].result,
+          from:results.result,
           message,
-          senderIsAuthUser:results[0].result.id.toString()==this.userProfilService.currentUser.getValue().id.toString()
+          senderIsAuthUser:results.result.id.toString()==this.userProfilService.currentUser.getValue().id.toString()
         })
       })
     })
@@ -130,6 +131,8 @@ export class ChatComponent implements OnInit {
     message.content.data=msg.toString();
     message.from.setId(this.userProfilService.currentUser.getValue().id.toString());
     message.date=new Date().toISOString();
+    message.messageSendState=MessageSendState.TRYING_SENDING;
+    console.log("Message ",message.from)
     if(this.selectedDiscussion.getValue().type==DiscussionType.PRIVATE_DISCUSSION)
     {
       let discuss=this.selectedDiscussion.getValue();
@@ -138,7 +141,7 @@ export class ChatComponent implements OnInit {
     }
     message.idDiscussion.setId(this.selectedDiscussion.getValue().id.toString());
     this.chatService.newMessage(message,message.idDiscussion)
-  //   console.log("new message ",message);
+    console.log("new message ",message);
   }
 
   newGroupUI()

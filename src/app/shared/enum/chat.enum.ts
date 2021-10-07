@@ -5,8 +5,15 @@ export enum ChatReadState{
 
 export enum MessageContentType
 {
-    TEXT_MESSAGE="text_message",
-    FILE_MESSAGE="file_message",
+    UNKNOW_MESSAGE=0,
+    TEXT_MESSAGE=1,
+    HTML_MESSAGE=2,
+    VOICE_MESSAGE=3,
+    IMAGE_MESSAGE=4,
+    AUDIO_MESSAGE=5,
+    VIDEO_MESSAGE=6,
+    DOCUMENT_MESSAGE=7,
+    FILE_MESSAGE=8,
 }
 
 export enum DiscussionType

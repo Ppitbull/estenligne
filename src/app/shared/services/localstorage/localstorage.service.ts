@@ -18,12 +18,12 @@ export class LocalStorageService {
 
   getUserDataWhenNavStart()
   {
-    this.router.events.subscribe((evt)=> {     
+    this.router.events.subscribe((evt)=> {
       if(evt instanceof NavigationStart)
       {
-        if(localStorage.getItem("data_udm_inscription"))
+        if(localStorage.getItem("data_est_en_ligne"))
         {
-          let dataObj:Boolean=JSON.parse(localStorage.getItem("data_udm_inscription"));
+          let dataObj:Boolean=JSON.parse(localStorage.getItem("data_est_en_ligne"));
           if(dataObj)
           {
             for(let key in dataObj)
@@ -33,7 +33,7 @@ export class LocalStorageService {
             }
           }
         }
-        
+
         this.eventService.loadedDataFromLocalStorage.next(true);
       }
     })
@@ -46,7 +46,7 @@ export class LocalStorageService {
 
   getSubjectByKey(key:String):BehaviorSubject<any>
   {
-    if(this.data.has(key)) return this.data.get(key);    
+    if(this.data.has(key)) return this.data.get(key);
     this.data.set(key,new BehaviorSubject<any>(null));
     return this.data.get(key);
   }
@@ -57,7 +57,7 @@ export class LocalStorageService {
     this.data.forEach((value:BehaviorSubject<any>,key:String)=>{
       dataObj[key.toString()]=value.getValue();
     });
-    localStorage.setItem("data_udm_inscription",JSON.stringify(dataObj));
+    localStorage.setItem("data_est_en_ligne",JSON.stringify(dataObj));
   }
   clearData()
   {

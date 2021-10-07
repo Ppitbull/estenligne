@@ -27,7 +27,6 @@ export class UserProfilService {
         let user:User=new User()
         user.hydrate(userObj)
         this.currentUser.next(user)
-        console.log("User ",user)
       }
     })
   }
@@ -77,11 +76,11 @@ export class UserProfilService {
             "about":user.about
           })
         ).then((result:ActionStatus)=>{
-          console.log(result.result)
           user.hydrate(result.result.getData())
           this.currentUser.getValue().hydrate(user.toString());
           this.currentUser.next(this.currentUser.getValue())
           result.result=this.currentUser.getValue()
+          this.userService.setUser(user)
           resolve(result)
         })
         .catch((error:ActionStatus)=>{

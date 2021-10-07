@@ -110,10 +110,8 @@ export class AuthService {
         let user:User=new User();
         user.hydrate(result.result.getData());
         this.setAuth({isLoggedIn:true})
-        console.log("Result Value",result.result)
 
         this.apiService.setHeaderToStorage("token",result.result.getData()["token"])
-        console.log("Result Value",result)
         result.result = user;
         resolve(result);
       })

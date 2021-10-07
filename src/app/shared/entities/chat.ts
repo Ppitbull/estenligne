@@ -13,6 +13,7 @@ export interface MessageContent
 
 export class Message extends Entity
 {
+    author:EntityID=new EntityID()
     from:EntityID=new EntityID();
     to:EntityID=new EntityID();
     date:String="";
@@ -22,6 +23,11 @@ export class Message extends Entity
     messageSendState:MessageSendState=MessageSendState.TRYING_SENDING;
     idDiscussion:EntityID=new EntityID()
 
+    constructor()
+    {
+      super()
+      this.author.setId(-1);
+    }
     static build(msgObj):Message
     {
       let msg:Message=new Message();
@@ -35,6 +41,7 @@ export class Message extends Entity
         for(const key of Object.keys(entity))
         {
             if(key=="id") this.id.setId(entity[key]);
+            else if(key=="author") this.author.setId(entity[key]);
             else if(key=="from") this.from.setId(entity[key]);
             else if(key=="to") this.to.setId(entity[key]);
             else if(key=="idDiscussion") this.idDiscussion.setId(entity[key]);
@@ -49,6 +56,7 @@ export class Message extends Entity
         {
             if(k=="id") r[k]=this.id.toString();
             if(k=="from") r[k]=this.from.toString();
+            if(k=="author") r[k]=this.author.toString();
             if(k=="to") r[k]=this.to.toString();
             if(k=="idDiscussion") r[k]=this.idDiscussion.toString();
             else r[k]=Reflect.get(this,k);
@@ -76,10 +84,14 @@ export class Discussion extends Entity
         for(const k of Object.keys(this))
         {
             if(k=="userMembers") r[k]=this.userMembers.map((user)=>user.toString())
-            if(k=="chats") r[k]=this.chats.map((msg)=>msg.toString());
+            if(k=="chats") r[k]=this.chats.map((msg)=>{
+              console.log("Msg ",msg," toString ",msg.toString())
+              return msg.toString()
+            });
             if(k=="id") r[k]=this.id.toString()
             else r[k]=Reflect.get(this,k);
         }
+        console.log("R ",r)
         return r;
     }
     hydrate(entity: any)
@@ -95,6 +107,7 @@ export class Discussion extends Entity
 
             else if(key=="chats") this.chats=entity[key].map((chat:Record<string,any>)=> {
                     let m:Message=new Message();
+                    console.log("Chat ",chat)
                     m.hydrate(chat);
                     return m;
                 })

@@ -3,7 +3,7 @@ import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Discussion, GroupDiscussion, Message } from '../../entities/chat';
 import { EntityID } from '../../entities/entityid';
-import { ChatReadState, DiscussionType, MessageContentType } from '../../enum/chat.enum';
+import { ChatReadState, DiscussionType, MessageContentType, MessageSendState } from '../../enum/chat.enum';
 import { EventService } from '../../utils/services/events/event.service';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
@@ -18,7 +18,7 @@ import { MessageService } from './messages.service';
 })
 export class ChatService {
     listDiscusions: BehaviorSubject<Discussion[]> = new BehaviorSubject<Discussion[]>([]);
-
+    chatSendWorker:Worker;
     constructor(
         private eventService:EventService,
         private restApiService:RestApiClientService,
@@ -28,16 +28,50 @@ export class ChatService {
         )
     {
       this.localStorageService.getSubjectByKey("discuss_list").subscribe((discussObj)=>{
+        if(discussObj)
+        {
         this.listDiscusions.next(discussObj.map(d => Discussion.internalBuilder(d)))
+        }
+      })
+
+      //
+      if(typeof Worker !== 'undefined')
+      {
+        this.chatSendWorker=new Worker('./../../web-worker/chat-send.worker', { type: 'module' });
+        // this.chatSendWorker.postMessage({instance:this.setDiscussion})
+      }
+      this.eventService.loginEvent.subscribe((logged)=>{
+        if(logged)
+        {
+          this.chatSendWorker.postMessage(
+            {
+              type:"init",
+              data:{
+                token:this.restApiService.headerKey.getValue().get("token"),
+                apiUrl:this.restApiService.apiUrl
+              }
+            }
+            )
+        }
+      })
+
+      this.chatSendWorker.onmessage=((event:MessageEvent<{type:String,data:any}>)=>{
+        let data=event.data
+        if(data.type=="ok")
+        {
+          let messages=this.listDiscusions.getValue().find((discuss:Discussion)=>discuss.id.toString()==data.data.idDiscussion.toString())
+          messages.chats.find((message)=>message.id.toString()==data.data.id.toString()).messageSendState=MessageSendState.SEND;
+          this.setDiscussion(this.listDiscusions.getValue())
+        }
       })
 
     }
 
     setDiscussion(discuss:Discussion[])
     {
-      this.localStorageService.setData("discuss_list",discuss.map((d)=>d.toString()));
+      // this.localStorageService.setData("discuss_list",discuss.map((d)=>d.toString()));
+      this.listDiscusions.next(this.listDiscusions.getValue())
     }
-
 
 
     getAllDiscutionList(): Promise<ActionStatus> {
@@ -143,12 +177,16 @@ export class ChatService {
         });
     }
 
-    newMessage(msg: Message, discussID: EntityID): Promise<any> {
+    newMessage(msg: Message, discussID: EntityID) {
         this.listDiscusions.getValue().find((discuss:Discussion)=>discuss.id.toString()==discussID.toString()).chats.push(msg)
-        console.log(this.listDiscusions.getValue())
-        this.listDiscusions.next(this.listDiscusions.getValue());
-        return new Promise((resolve, reject) => {
-
-        });
+        this.setDiscussion(this.listDiscusions.getValue())
+        this.chatSendWorker.postMessage(
+          {
+            type:"send",
+            data:msg
+          }
+        )
     }
+
+    // sendToWorker()
 }

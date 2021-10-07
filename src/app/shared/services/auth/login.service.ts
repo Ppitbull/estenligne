@@ -30,7 +30,7 @@ export class LoginService {
       this.authService.authLogin(user)
       .then((result:ActionStatus)=>{
         user=result.result;
-        this.userProfil.setUser(user);
+        // this.userProfil.setUser(user);
         if(result.apiCode==ActionStatus.NOT_VALID_ACCOUNT_ERROR) result.code=ActionStatus.SUCCESS;
         else result.code=ActionStatus.SUCCESS_END;
         this.eventService.loginEvent.next(true);

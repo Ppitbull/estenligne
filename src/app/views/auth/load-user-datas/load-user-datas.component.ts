@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/shared/services/auth/login.service';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { LoaderDataService } from 'src/app/shared/services/loader-data/loader-data.service';
 import { UserProfilService } from 'src/app/shared/services/user-profil/user-profil.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 import { ActionStatus } from 'src/app/shared/utils/services/firebase';
 
 @Component({
@@ -20,7 +21,8 @@ export class LoadUserDatasComponent implements OnInit {
     private userProfileService:UserProfilService,
     private loginService:LoginService,
     private chatService:ChatService,
-    private router:Router
+    private router:Router,
+    private userService:UserService
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +32,7 @@ export class LoadUserDatasComponent implements OnInit {
       let user:User=new User();
       user.hydrate(data["userProfile"]);
       this.userProfileService.setUser(user);
+      this.userService.setUser(user);
       return this.loaderDataService.fcmRegistration(data["id"],data["pushNotificationToken"])
     })
     .then(()=>{

@@ -41,7 +41,7 @@ export class UserService {
 
   setListUser(users:Map<String,User>)
   {
-    this.localStorageService.setData("data_users",Array.from(users.values()))
+    this.localStorageService.setData("data_users",Array.from(users.values()).map((user:User)=>user.toString()))
   }
 
 
@@ -59,10 +59,11 @@ export class UserService {
 
   // recuperer les informations d'un utilisateur
   getUserById(userID: EntityID): Promise<ActionStatus> {
-    // console.log("User Found ",userID,this.listUser)
+    console.log("User Found ",userID.toString(),this.listUser)
 
     return new Promise<any>((resolve, reject) => {
       if (this.listUser.has(userID.toString())) {
+        console.log('SDQFSDF ')
         let result: ActionStatus = new ActionStatus();
         result.result = this.listUser.get(userID.toString());
         return resolve(result);
@@ -73,6 +74,7 @@ export class UserService {
           let user:User=new User();
           user.hydrate(value.result.getData())
           this.setUser(user);
+          console.log("User  Pro",user)
           value.result=user;
           resolve(value);
         })

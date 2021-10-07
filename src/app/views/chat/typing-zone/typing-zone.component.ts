@@ -18,7 +18,7 @@ export class TypingZoneComponent implements OnInit {
   }
   sendMessage():void
   {
-    // console.log("Input  ",this.formInput.value)
+    // console.log("Input  ",this.form.value)
     if(!this.form.valid) return;
     this.sendNewMessage.emit(this.form.value.formInput);
     this.form.reset();
