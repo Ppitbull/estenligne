@@ -40,10 +40,8 @@ export class AuthService {
    */
   logOut() {
     this.setAuth({isLoggedIn:false})
-    // ;
-    // this.apiService.sendRequest(new KRequest().)
-    // this.note.showNotification('succes', 'Vous avez été déconnecté!');
-    localStorage.clear();
+    this.localStorageService.clearData()
+    this.eventService.logoutEvent.next(true);
   }
 
   /**

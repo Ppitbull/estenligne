@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BehaviorSubject } from 'rxjs';
 import { Discussion, Message } from 'src/app/shared/entities/chat';
@@ -48,7 +49,9 @@ export class ChatComponent implements OnInit {
     private chatService:ChatService,
     private userService: UserService,
     private userProfilService:UserProfilService,
-    private modalService:BsModalService
+    private modalService:BsModalService,
+    private authService:AuthService,
+    private router:Router
     ) { }
 
 
@@ -159,6 +162,7 @@ export class ChatComponent implements OnInit {
 
   logout()
   {
-
+    this.authService.logOut()
+    this.router.navigate(['login'])
   }
 }

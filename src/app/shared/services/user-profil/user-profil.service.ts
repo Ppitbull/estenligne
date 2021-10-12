@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EntityID } from '../../entities/entityid';
 import { User } from '../../entities/user';
+import { EventService } from '../../utils/services/events/event.service';
 import { ActionStatus } from '../../utils/services/firebase';
 import { CRequest } from '../../utils/services/http/client/crequest';
 import { CResponse } from '../../utils/services/http/client/cresponse';
@@ -19,7 +20,8 @@ export class UserProfilService {
   constructor(
     private localStorageService:LocalStorageService,
     private userService:UserService,
-    private restApi:RestApiClientService
+    private restApi:RestApiClientService,
+    private eventService:EventService
     ) {
 
     this.localStorageService.getSubjectByKey("user_profil").subscribe((userObj:any)=>{
@@ -27,6 +29,12 @@ export class UserProfilService {
         let user:User=new User()
         user.hydrate(userObj)
         this.currentUser.next(user)
+      }
+    })
+    this.eventService.logoutEvent.subscribe((value)=>{
+      if(value)
+      {
+        this.currentUser.next(null)
       }
     })
   }
