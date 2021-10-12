@@ -25,23 +25,28 @@ class ChatSendWorker
   {
     while (this.start)
     {
-      let stateTransfert,message;
-      ({stateTransfert,message}=this.fileMessage.shift())
-      if(stateTransfert==MessageSendingState.IN_WAITING_STATE)
-      {
-        this.sendMessage(message)
-        .then((result)=>{
-          this.sendMessageToUI(message);
-        })
-        .catch((error)=>{
-          this.fileMessage.push({
-            stateTransfert:MessageSendingState.IN_WAITING_STATE,
-            message
-          })
-        })
-      }
 
-    }
+      if(this.fileMessage.length>0)
+      {
+        let stateTransfert,message;
+
+          ({stateTransfert,message}=this.fileMessage.shift())
+          if(stateTransfert==MessageSendingState.IN_WAITING_STATE)
+          {
+            this.sendMessage(message)
+            .then((result)=>{
+              this.sendMessageToUI(message);
+            })
+            .catch((error)=>{
+              this.fileMessage.push({
+                stateTransfert:MessageSendingState.IN_WAITING_STATE,
+                message
+              })
+            })
+          }
+
+        }
+      }
   }
 
   newMessage(message:Message)
@@ -173,6 +178,5 @@ addEventListener('message', ({ data }) => {
   {
     chatSendWorker.newMessage(data["data"])
   }
-  const response = `worker response to ${data}`;
   // postMessage(response);
 });
